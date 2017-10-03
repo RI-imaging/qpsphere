@@ -1,5 +1,5 @@
 qpsphere
-=======
+========
 
 |PyPI Version| |Tests Status| |Coverage Status| |Docs Status|
 
