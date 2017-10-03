@@ -1,0 +1,28 @@
+language: python
+python:
+- '3.5'
+- '3.6'
+notifications:
+  email: false
+env:
+  matrix:
+  - TEST="PYTEST"
+  - TEST="FLAKE8"
+install:
+# everything else
+- travis_retry pip install .
+# coverage packages
+- travis_retry pip install flake8
+- travis_retry pip install codecov coverage
+- pip freeze
+script:
+- set -ev
+- if [ "${TEST}" == "PYTEST" ]; then
+       coverage run --source=qpsphere ./setup.py test;
+       coverage report -m;
+       codecov;
+  else
+       flake8 qpsphere;
+       flake8 examples;
+       flake8 tests --ignore E402;
+  fi;
