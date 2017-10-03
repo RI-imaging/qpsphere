@@ -26,7 +26,7 @@ Testing
 
 ::
 
-    python setup.py develop
+    pip install -e .
     python setup.py test
     
 
