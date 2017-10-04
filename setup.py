@@ -7,7 +7,7 @@ import sys
 
 author = u"Paul Müller"
 authors = [author]
-description = 'python3 library for spheres in quantitative phase imaging'
+description = 'library for analyzing spherical objects in phase imaging'
 name = 'qpsphere'
 year = "2017"
 

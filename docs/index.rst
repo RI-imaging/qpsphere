@@ -1,10 +1,11 @@
 qpsphere documentation
 ======================
 
-Qpsphere is a Python3 library that provides several methods
-to extract refractive index and radius of spherical, dielectric
-objects in quantitative phase imaging.
-This is the documentaion of qpsphere version |release|.
+Qpsphere is a Python3 library for analyzing spherical objects
+in quantitative phase imaging. This includes the extraction
+of average refractive index and object radius, for which
+several methods are implemented.
+ This is the documentaion of qpsphere version |release|.
 
 .. toctree::
    :maxdepth: 4

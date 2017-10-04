@@ -4,7 +4,7 @@ qpsphere
 |PyPI Version| |Tests Status| |Coverage Status| |Docs Status|
 
 
-**qpsphere** is a Python3 library for spheres in quantitative phase imaging.
+**qpsphere** is a Python3 library for analyzing spherical objects in quantitative phase imaging.
 
 
 Documentation
