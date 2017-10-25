@@ -1,10 +1,13 @@
 """Refractive index determination for a single cell
 
 This example illustrates how qpsphere can be used to determine
-the radius and refractive index of a spherical cell.
-The hologram of the myeloid leukemia cell (HL60) shown was
+the radius and the refractive index of a spherical cell.
+The hologram of the myeloid leukemia cell (HL60) on the left was
 recorded using digital holographic microscopy (DHM).
-The setup used for recording this data is described in [1]_,
+In the quantitative phase image on the right, the detected cell
+contour (white) and the subsequent circle fit (red) as well as the
+resulting average radius and refractive index of the the cell
+are shown. The setup used for recording this data is described in [1]_,
 which also contains a description of the basic steps to determine
 the position and radius of the cell and to subsequently compute
 the average refractive index from the experimental phase data.
@@ -45,35 +48,35 @@ qpi.compute_bg(which_data=["amplitude", "phase"],
                border_px=5,
                )
 
-# perform edge detection, guess the cell radius: 10µm
+# determine radius and refractive index, guess the cell radius: 10µm
 n, r, (cx, cy), edge = qpsphere.edgefit.analyze(qpi=qpi,
                                                 r0=10e-6,
                                                 ret_center=True,
                                                 ret_edge=True)
 
-# Plot results
+# plot results
 fig = plt.figure(figsize=(8, 4))
 matplotlib.rcParams["image.interpolation"] = "bicubic"
 holkw = {"cmap": "gray",
          "vmin": 0,
          "vmax": 200}
-# plot hologram image
+# hologram image
 ax1 = plt.subplot(121, title="cell hologram")
 map1 = ax1.imshow(edata["data"].T, **holkw)
 plt.colorbar(map1, ax=ax1, fraction=.048, pad=0.04)
-# plot phase image
+# phase image
 ax2 = plt.subplot(122, title="phase image [rad]")
 map2 = ax2.imshow(qpi.pha.T)
-# show edge
+# edge
 edgeplot = np.ma.masked_where(edge == 0, edge)
 ax2.imshow(edgeplot.T, cmap="gray_r", interpolation="none")
-# show fitted circle center
+# fitted circle center
 plt.plot(cx, cy, "xr", alpha=.5)
-# show fitted circle perimeter
+# fitted circle perimeter
 circle = plt.Circle((cx, cy), r/qpi["pixel size"],
                     color='r', fill=False, ls="dashed", lw=2, alpha=.5)
 ax2.add_artist(circle)
-# show fitting results as text
+# fitting results as text
 info = "n={:.4F}\nr={:.2f}µm".format(n, r*1e6)
 ax2.text(.8, .8, info, color="w", fontsize="13", verticalalignment="top")
 plt.colorbar(map2, ax=ax2, fraction=.048, pad=0.04)
