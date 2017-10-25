@@ -65,7 +65,7 @@ plt.colorbar(map1, ax=ax1, fraction=.048, pad=0.04)
 ax2 = plt.subplot(122, title="phase image [rad]")
 map2 = ax2.imshow(qpi.pha.T)
 # show edge
-edgeplot = np.ma.masked_where(edge==0, edge)
+edgeplot = np.ma.masked_where(edge == 0, edge)
 ax2.imshow(edgeplot.T, cmap="gray_r", interpolation="none")
 # show fitted circle center
 plt.plot(cx, cy, "xr", alpha=.5)
@@ -74,7 +74,7 @@ circle = plt.Circle((cx, cy), r/qpi["pixel size"],
                     color='r', fill=False, ls="dashed", lw=2, alpha=.5)
 ax2.add_artist(circle)
 # show fitting results as text
-info = "n={:.4F}\nr={:.2f}µm".format(n,r*1e6)
+info = "n={:.4F}\nr={:.2f}µm".format(n, r*1e6)
 ax2.text(.8, .8, info, color="w", fontsize="13", verticalalignment="top")
 plt.colorbar(map2, ax=ax2, fraction=.048, pad=0.04)
 # disable axes

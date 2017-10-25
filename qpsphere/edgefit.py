@@ -16,7 +16,7 @@ class EdgeDetectionWarning(Warning):
 
 def analyze(qpi, r0, ret_center=False, ret_edge=False):
     """Get refractive index and radius using Canny edge detection
-    
+
     Compute the refractive index of a spherical phase object by
     detection of an edge in the phase image, a subsequent circle
     fit to the edge, and finally a weighted average over the phase
@@ -49,7 +49,7 @@ def analyze(qpi, r0, ret_center=False, ret_edge=False):
     phase = qpi.pha
     # determine edge
     edge = contour_canny(image=phase,
-                         radius=r0/px_m,
+                         radius=r0 / px_m,
                          mult_coarse=.4,
                          mult_fine=.1,
                          clip_rmin=.9,
@@ -70,6 +70,7 @@ def analyze(qpi, r0, ret_center=False, ret_edge=False):
     if ret_edge:
         ret.append(edge)
     return ret
+
 
 def average_sphere(image, center, radius, ret_crop=False):
     """Compute weighted phase number from a 2D phase image of a sphere
@@ -112,6 +113,55 @@ def average_sphere(image, center, radius, ret_crop=False):
     else:
         return average
 
+def circle_fit(edge, ret_dev=False):
+    """Fit a circle to a boolean edge image
+
+    Parameters
+    ----------
+    edge: 2d boolean ndarray
+        Edge image
+    ret_dev: bool
+        Return the average deviation of the distance from contour to
+        center of the fitted circle.
+
+    Returns
+    -------
+    center, radius: tuple of floats, float
+        Coordinates of the circle. If `ret_dev` is True, then the
+        average deviation from the circle is also returned.
+    """
+    sx, sy = edge.shape
+    x = np.linspace(0, sx, sx, endpoint=False).reshape(-1, 1)
+    y = np.linspace(0, sy, sy, endpoint=False).reshape(1, -1)
+    params = lmfit.Parameters()
+    # initial parameters
+    sum_edge = np.sum(edge)
+    params.add("cx", np.sum(x * edge) / sum_edge)
+    params.add("cy", np.sum(y * edge) / sum_edge)
+    # data
+    xedge, yedge = np.where(edge)
+    # minimize
+    out = lmfit.minimize(circle_residual, params, args=(xedge, yedge))
+    center = (out.params["cx"].value, out.params["cy"].value)
+    radii = circle_radii(out.params, xedge, yedge)
+    radius = np.mean(radii)
+
+    if ret_dev:
+        dev = np.average(np.abs(radii - radius))
+        return center, radius, dev
+    else:
+        return center, radius
+
+def circle_radii(params, xedge, yedge):
+    cx = params["cx"].value
+    cy = params["cy"].value
+    radii = np.sqrt((cx - xedge)**2 + (cy - yedge)**2)
+    return radii
+
+def circle_residual(params, xedge, yedge):
+    radii = circle_radii(params, xedge, yedge)
+    return radii - np.mean(radii)
+
 def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
                   clip_rmin=.9, clip_rmax=1.1, maxiter=20,
                   verbose=True):
@@ -153,19 +203,19 @@ def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
     If no edge is found using the filter size defined by `mult_coarse`,
     then the coarse filter size is reduced by a factor of 2 until an
     edge is found or until `maxiter` is reached.
-    
+
     The edge found using the filter size defined by `mult_fine` is
     heuristically filtered (parts at the center and at the edge of the
     image are removed). This heuristic filtering assumes that the
     circular object is centered in the image.
-    
+
     See Also
     --------
     skimage.feature.canny: Canny edge detection algorithm used
     """
     image = (image - image.min()) / (image.max() - image.min())
 
-    if radius > image.shape[0]/2:
+    if radius > image.shape[0] / 2:
         msg = "`radius` in pixels exceeds image size: {}".format(radius)
         raise ValueError(msg)
     # 1. Perform a coarse Canny edge detection. If the edge found is empty,
@@ -239,52 +289,3 @@ def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
               + "modifying `radius`, or reducing `mult_coarse`."
         raise EdgeDetectionError(msg)
     return edge_fine
-
-def circle_fit(edge, ret_dev=False):
-    """Fit a circle to a boolean edge image
-
-    Parameters
-    ----------
-    edge: 2d boolean ndarray
-        Edge image
-    ret_dev: bool
-        Return the average deviation of the distance from contour to
-        center of the fitted circle.
-
-    Returns
-    -------
-    center, radius: tuple of floats, float
-        Coordinates of the circle. If `ret_dev` is True, then the
-        average deviation from the circle is also returned.
-    """
-    sx, sy = edge.shape
-    x = np.linspace(0, sx, sx, endpoint=False).reshape(-1, 1)
-    y = np.linspace(0, sy, sy, endpoint=False).reshape(1, -1)
-    params = lmfit.Parameters()
-    # initial parameters
-    sum_edge = np.sum(edge)
-    params.add("cx", np.sum(x * edge) / sum_edge)
-    params.add("cy", np.sum(y * edge) / sum_edge)
-    # data
-    xedge, yedge = np.where(edge)
-    # minimize
-    out = lmfit.minimize(circle_residual, params, args=(xedge, yedge))
-    center = (out.params["cx"].value, out.params["cy"].value)
-    radii = circle_radii(out.params, xedge, yedge)
-    radius = np.mean(radii)
-
-    if ret_dev:
-        dev = np.average(np.abs(radii - radius))
-        return center, radius, dev
-    else:
-        return center, radius
-
-def circle_residual(params, xedge, yedge):
-    radii = circle_radii(params, xedge, yedge) 
-    return radii - np.mean(radii)
-
-def circle_radii(params, xedge, yedge):
-    cx = params["cx"].value
-    cy = params["cy"].value    
-    radii = np.sqrt((cx - xedge)**2 + (cy - yedge)**2)
-    return radii
