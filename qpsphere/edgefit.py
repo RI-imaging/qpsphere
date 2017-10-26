@@ -90,7 +90,7 @@ def average_sphere(image, center, radius, weighted=True, ret_crop=False):
         at the center of the sphere more weight than those points
         at the boundary of the sphere, avoiding edge artifacts.
     ret_crop: bool
-        Return the cropped (and smoothed) image.
+        Return the cropped image.
 
     Returns
     -------
@@ -208,6 +208,7 @@ def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
         Maximal iterations for rough edge computation, see Notes
     verbose: bool
         If set to `True`, issues EdgeDetectionWarning where applicable
+
     Returns
     -------
     edge : 2d boolean ndarray
