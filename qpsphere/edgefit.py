@@ -72,7 +72,7 @@ def analyze(qpi, r0, ret_center=False, ret_edge=False):
     return ret
 
 
-def average_sphere(image, center, radius, ret_crop=False):
+def average_sphere(image, center, radius, weighted=True, ret_crop=False):
     """Compute weighted phase number from a 2D phase image of a sphere
 
     Parameters
@@ -83,6 +83,12 @@ def average_sphere(image, center, radius, ret_crop=False):
         Center of the sphere in `image` in ndarray coordinates
     radius: float
         Radius of the sphere in pixels
+    weighted: bool
+        If `True`, return average phase density weighted with the
+        height profile obtained from the radius, otherwise return
+        simple average phase density. Weighting gives data points
+        at the center of the sphere more weight than those points
+        at the boundary of the sphere, avoiding edge artifacts.
     ret_crop: bool
         Return the cropped (and smoothed) image.
 
@@ -95,23 +101,29 @@ def average_sphere(image, center, radius, ret_crop=False):
         Returned if `ret_crop` is True
     """
     sx, sy = image.shape
-    x = np.linspace(0, sx, sx, endpoint=False).reshape(-1, 1)
-    y = np.linspace(0, sy, sy, endpoint=False).reshape(1, -1)
+    x = np.arange(sx).reshape(-1, 1)
+    y = np.arange(sy).reshape(1, -1)
     discsq = ((x - center[0])**2 + (y - center[1])**2)
     root = radius**2 - discsq
     # height of the cell for each x and y
     h = 2 * np.sqrt(root * (root > 0))
     # compute phase density
     rho = np.zeros(image.shape)
-    # prevent zero division errors
-    hbin = (h != 0)
+    hbin = h != 0
+    # phase density [rad/px]
     rho[hbin] = image[hbin] / h[hbin]
-    # compute average
-    average = np.sum(rho * h) / np.sum(h)
-    if ret_crop:
-        return average, rho
+    if weighted:
+        # compute weighted average
+        average = np.sum(rho * h) / np.sum(h)
     else:
-        return average
+        # compute simple average
+        average = np.sum(rho) / np.sum(hbin)
+
+    ret = average
+    if ret_crop:
+        ret = (ret, rho)
+    return ret
+
 
 def circle_fit(edge, ret_dev=False):
     """Fit a circle to a boolean edge image
@@ -146,11 +158,12 @@ def circle_fit(edge, ret_dev=False):
     radii = circle_radii(out.params, xedge, yedge)
     radius = np.mean(radii)
 
+    ret = [center, radius]
     if ret_dev:
         dev = np.average(np.abs(radii - radius))
-        return center, radius, dev
-    else:
-        return center, radius
+        ret.append(dev)
+    return ret
+
 
 def circle_radii(params, xedge, yedge):
     cx = params["cx"].value
@@ -158,9 +171,11 @@ def circle_radii(params, xedge, yedge):
     radii = np.sqrt((cx - xedge)**2 + (cy - yedge)**2)
     return radii
 
+
 def circle_residual(params, xedge, yedge):
     radii = circle_radii(params, xedge, yedge)
     return radii - np.mean(radii)
+
 
 def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
                   clip_rmin=.9, clip_rmax=1.1, maxiter=20,
