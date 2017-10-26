@@ -15,7 +15,7 @@ class EdgeDetectionWarning(Warning):
 
 
 def analyze(qpi, r0, ret_center=False, ret_edge=False):
-    """Get refractive index and radius using Canny edge detection
+    """Determine Refractive index and radius using Canny edge detection
 
     Compute the refractive index of a spherical phase object by
     detection of an edge in the phase image, a subsequent circle
