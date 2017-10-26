@@ -25,7 +25,7 @@ def analyze(qpi, n0=None, r0=None, method="edge", model="projection",
         `method` is "edge", only "projection" is allowed.
         If `method` is "image", `model` can be one of
         "mie", "projection", "rytov", or "rytov-sc".
-    
+
     ret_center: bool
         Return the center coordinate of the sphere
 
