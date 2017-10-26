@@ -44,8 +44,8 @@ Choosing method and model
 -------------------------
 Although the edge-based approach is fast, it is inaccurate because it
 is resolution-dependent and because it is based on a phase projection
-model. Higher accuracy can be achieved by fitting a 2D modeled to the
-experimental phase image. Several models are available:
+model. Higher accuracy can be achieved by fitting a 2D model to the
+experimental phase image. Several models are available in qpsphere:
 
 - "mie": an Mie model, polarization-averaged
 - "projection": a simple optical path difference projection model
