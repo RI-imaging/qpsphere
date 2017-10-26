@@ -40,8 +40,8 @@ meters). If the experimental data file format is supported by
 where ``n`` is the average refractive index and ``r`` is the radius
 of the object in meters.
 
-Choosing a method and a model
------------------------------
+Choosing method and model
+-------------------------
 Although the edge-based approach is fast, it is inaccurate because it
 is resolution-dependent and because it is based on a phase projection
 model. Higher accuracy can be achieved by fitting a 2D modeled to the
