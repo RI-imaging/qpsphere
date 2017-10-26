@@ -22,15 +22,15 @@ def test_average_sphere_crop():
                                                 radius=radius,
                                                 weighted=True,
                                                 ret_crop=True)
-    assert np.all((data == 0) == (crop == 0)) 
-    assert np.allclose(crop[crop !=0 ], avg)
+    assert np.all((data == 0) == (crop == 0))
+    assert np.allclose(crop[crop != 0], avg)
 
 
 def test_average_sphere_even():
     radius = 1.01
     hcenter = 2 * radius
     # hquarter is located at the center of the adjacent pixels
-    hquarter = 2 * np.sqrt(radius**2 - 2*.5**2)
+    hquarter = 2 * np.sqrt(radius**2 - 2 * .5**2)
     data = np.zeros((4, 4), dtype=float)
     pquarter = 7 * hquarter / hcenter  # ideal sphere
     data[1, 1] = data[1, 2] = data[2, 1] = data[2, 2] = pquarter
@@ -96,11 +96,11 @@ def test_contour_canny_basic():
     data = np.zeros((size, size), dtype=float)
     x = np.arange(size).reshape(-1, 1)
     y = np.arange(size).reshape(1, -1)
-    r = np.sqrt((x-cx)**2 + (y-cy)**2)
+    r = np.sqrt((x - cx)**2 + (y - cy)**2)
     data[r <= radius] = 1
     # perform edge detection
     edge = qpsphere.edgefit.contour_canny(image=data,
-                                          radius=radius*.9)
+                                          radius=radius * .9)
     # this might differ from implementation to implementation
     assert np.sum(edge) == 56
     # the edge fully contains `data`
