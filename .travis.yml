@@ -9,6 +9,8 @@ env:
   - TEST="PYTEST"
   - TEST="FLAKE8"
 install:
+# qpimage development version
+- travis_retry pip install git+git://github.com/RI-Imaging/qpimage.git
 # everything else
 - travis_retry pip install .
 # coverage packages

@@ -199,13 +199,13 @@ def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
         The fine edge detection has a filter size of
         ``sigma = mult_fine * radius``
     clip_rmin: float
-        Removes edges that are closer than `clip_rmin` times the average
-        radial edge position from the center of the image.
+        Removes edge points that are closer than `clip_rmin` times the
+        average radial edge position from the center of the image.
     clip_rmax: float
-        Removes edges that are further than `clip_rmin` times the
+        Removes edge points that are further than `clip_rmin` times the
         average radial edge position from the center of the image.
     maxiter: int
-        Maximal iterations for rough edge computation, see Notes
+        Maximum number iterations for coarse edge detection, see Notes
     verbose: bool
         If set to `True`, issues EdgeDetectionWarning where applicable
 
