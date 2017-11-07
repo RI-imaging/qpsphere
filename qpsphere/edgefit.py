@@ -14,7 +14,7 @@ class EdgeDetectionWarning(Warning):
     pass
 
 
-def analyze(qpi, r0, ret_center=False, ret_edge=False):
+def analyze(qpi, r0, edgekw={}, ret_center=False, ret_edge=False):
     """Determine Refractive index and radius using Canny edge detection
 
     Compute the refractive index of a spherical phase object by
@@ -28,6 +28,8 @@ def analyze(qpi, r0, ret_center=False, ret_edge=False):
         Quantitative phase image information
     r0: float
         Approximate radius of the sphere [m]
+    edgekw: dict
+        Additional keyword arguments for `contour_canny`
     ret_center: bool
         Return the center coordinate of the sphere
 
@@ -50,12 +52,8 @@ def analyze(qpi, r0, ret_center=False, ret_edge=False):
     # determine edge
     edge = contour_canny(image=phase,
                          radius=r0 / px_m,
-                         mult_coarse=.4,
-                         mult_fine=.1,
-                         clip_rmin=.9,
-                         clip_rmax=1.1,
-                         maxiter=20,
-                         verbose=False
+                         verbose=False,
+                         **edgekw,
                          )
     # fit circle to edge
     center, r = circle_fit(edge)
