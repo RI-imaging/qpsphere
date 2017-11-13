@@ -6,7 +6,7 @@ available = {"projection": projection,
 
 
 def simulate(radius=5, sphere_index=1.339, medium_index=1.333,
-             wavelength=550e-9, pixel_size=.1, model="projection",
+             wavelength=550e-9, pixel_size=1e-7, model="projection",
              grid_size=(80, 80), center=(40, 40)):
     """Simulate scattering at a sphere
 

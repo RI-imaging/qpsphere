@@ -31,7 +31,7 @@ def projection(radius=5, sphere_index=1.339, medium_index=1.333,
     """
     # grid
     x = np.arange(grid_size[0]).reshape(-1, 1)
-    y = np.arange(grid_size[0]).reshape(1, -1)
+    y = np.arange(grid_size[1]).reshape(1, -1)
     cx, cy = center
     # sphere location
     rpx = radius / pixel_size
