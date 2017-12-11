@@ -1,7 +1,9 @@
-from .projection import projection
+from .mod_mie import mie
+from .mod_proj import projection
 
 
-available = {"projection": projection,
+available = {"mie": mie,
+             "projection": projection,
              }
 
 
