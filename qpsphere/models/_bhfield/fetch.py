@@ -4,6 +4,7 @@ import hashlib
 import os
 import pathlib
 import platform
+import stat
 import urllib
 
 import appdirs
@@ -64,6 +65,10 @@ def get_binary(arp=False):
                 not md5sum(binary) == md5):
 
             download_binary(url=url, dest=binary, md5=md5)
+
+        # make sure file is executable
+        st = binary.stat()
+        binary.chmod(st.st_mode | stat.S_IEXEC)
 
     if arp:
         ret_binary = pathlib.Path(CACHE_DIR) / EXE_ARP

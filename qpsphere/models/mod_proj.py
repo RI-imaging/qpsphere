@@ -2,9 +2,9 @@ import numpy as np
 import qpimage
 
 
-def projection(radius=5, sphere_index=1.339, medium_index=1.333,
-               wavelength=550e-9, pixel_size=.1, grid_size=(80, 80),
-               center=(40, 40)):
+def projection(radius=5e-6, sphere_index=1.339, medium_index=1.333,
+               wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
+               center=(39.5, 39.5)):
     """Optical path difference for a dielectric sphere
 
     Parameters

@@ -1,27 +1,31 @@
 """BHFIELD sphere wrapper"""
-import numpy as np
+import numbers
 import os
-from os.path import join, abspath, splitext
-
+import pathlib
 import subprocess as sp
-
 import tempfile
 import warnings
 
+import numpy as np
+
 from .fetch import get_binary
 
-types_number = (int, float)
+
+class BHFIELDExecutionError(BaseException):
+    """Raised when BHFIELD fails"""
+    pass
 
 
-def clear_temp(wdir=".", deldir=True):
-    """ Remove all files in wdir and wdir
-    """
-    endings = [".log", ".dat", ".txt"]
+def clear_temp(wdir="."):
+    """ Remove all files in wdir"""
+    wdir = pathlib.Path(wdir)
+    extensions = ["*.log", "*.dat", "*.txt"]
 
-    for f in os.listdir(wdir):
-        if splitext(f)[1] in endings:
-            os.remove(join(wdir, f))
-    os.rmdir(wdir)
+    for ext in extensions:
+        for ff in wdir.glob(ext):
+            ff.unlink()
+
+    wdir.rmdir()
 
 
 def load_field(wdir=".", size_grid=None):
@@ -84,10 +88,11 @@ def load_field(wdir=".", size_grid=None):
     V_3*.dat:
         vector fields at the outside of the sphere
     """
-    field_file = join(abspath(wdir), "V_0Ereim.dat")
-    if not os.path.exists(field_file):
-        raise OSError("Field file not found!")
-    a = np.loadtxt(field_file)
+    wdir = pathlib.Path(wdir)
+    check_simulation(wdir)
+    field_file = wdir / "V_0Ereim.dat"
+
+    a = np.loadtxt(str(field_file))
 
     if size_grid is None:
         x = a[:, 0]
@@ -95,7 +100,7 @@ def load_field(wdir=".", size_grid=None):
         # z = a[:,2]
         size_grid = int(np.sqrt(len(x)))
 
-    if isinstance(size_grid, types_number):
+    if isinstance(size_grid, numbers.Real):
         size_grid = np.array((size_grid, size_grid), dtype=int)
 
     assert size_grid[0] == int(
@@ -114,7 +119,7 @@ def load_field(wdir=".", size_grid=None):
 
 
 def simulate_sphere(radius_sphere_um=2.5,
-                    size_simulation_um=5,
+                    size_simulation_um=(5, 5),
                     size_grid=50,
                     refractive_index_medium=1.0,
                     refractive_index_sphere=1.001,
@@ -149,26 +154,10 @@ def simulate_sphere(radius_sphere_um=2.5,
     arp: bool
         Use arbitrary precision
     """
-    # express RI of sphere in RI of medium
-    refractive_index_sphere /= refractive_index_medium
-    # Normalize wavelength to medium [sic]:
-    # All parameters are given in um instead of wavelengths.
-    # As a result, if we want to scale the RI of the medium
-    # to one, we need to change the vacuum wavelength such
-    # that the wavelength in the medium matches the wavelength
-    # that we would observe in the actual simulation.
-    wavelength_nm /= refractive_index_medium
-
-    refractive_index_medium = 1
-
     wavelength_um = wavelength_nm / 1000
 
     # size simulation tuple
     sizeum = size_simulation_um
-    if isinstance(sizeum, types_number):
-        sizeum = np.array(sizeum, sizeum)
-    else:
-        sizeum = np.array(sizeum)
 
     # The size of the simulation must be zero
     # if there is only one grid point.
@@ -184,7 +173,7 @@ def simulate_sphere(radius_sphere_um=2.5,
 
     while True:
         # create temp dir
-        wdir = tempfile.mkdtemp()
+        wdir = tempfile.mkdtemp(prefix="qpsphere_bhfield_")
 
         try:
             run_simulation(wdir=wdir,
@@ -193,11 +182,11 @@ def simulate_sphere(radius_sphere_um=2.5,
                            r_core=radius_sphere_um,
                            r_coat=radius_sphere_um,
                            n_grid_x=int(size_grid[0]),
-                           xspan_min=-sizeum[0] / 2 + offset_x_um,
-                           xspan_max=sizeum[0] / 2 + offset_x_um,
+                           xspan_min=-sizeum[0] / 2 - offset_x_um,
+                           xspan_max=sizeum[0] / 2 - offset_x_um,
                            n_grid_y=int(size_grid[1]),
-                           yspan_min=-sizeum[1] / 2 + offset_y_um,
-                           yspan_max=sizeum[1] / 2 + offset_y_um,
+                           yspan_min=-sizeum[1] / 2 - offset_y_um,
+                           yspan_max=sizeum[1] / 2 - offset_y_um,
                            n_grid_z=1,
                            zspan_min=measurement_position_um,
                            zspan_max=measurement_position_um,
@@ -234,19 +223,19 @@ def run_simulation(wdir=".", arp=True, **kwargs):
     embedded in water; arprec 20 digits; illuminated with YAG (1064nm);
     scan xz plane (21x21, +-200nm)
 
-    bhfield-arp.exe mpdigit wl r_core r_coat
-                    n_grid_x xspan_min xspan_max
-                    n_grid_y yspan_min yspan_max
-                    n_grid_z zspan_min zspan_max
-                    case  Kreibig
-                    [n_med n_core k_core n_coat k_coat (case=other)]
+    bhfield-arp-db.exe mpdigit wl r_core r_coat
+                       n_grid_x xspan_min xspan_max
+                       n_grid_y yspan_min yspan_max
+                       n_grid_z zspan_min zspan_max
+                       case  Kreibig
+                       [n_med n_core k_core n_coat k_coat (case=other)]
 
-    bhfield-arp.exe 20 1.064 0.050 0.060
-                    21 -0.2 0.2
-                    1 0 0
-                    21 -0.2 0.2
-                    other 0
-                    1.3205 1.53413 0 0.565838 7.23262
+    bhfield-arp-db.exe 20 1.064 0.050 0.060
+                       21 -0.2 0.2
+                       1 0 0
+                       21 -0.2 0.2
+                       other 0
+                       1.3205 1.53413 0 0.565838 7.23262
 
 
     Explanation of parameters
@@ -280,14 +269,15 @@ def run_simulation(wdir=".", arp=True, **kwargs):
     The latter reflects our own interest and is intended
     for use in our lab, so general users may not find it useful :-)
     """
+    wdir = pathlib.Path(wdir)
     cmd = "{pathbhfield} {mpdigit} {wl:f} {r_core:f} {r_coat:f} " \
           + "{n_grid_x:d} {xspan_min:f} {xspan_max:f} " \
           + "{n_grid_y:d} {yspan_min:f} {yspan_max:f} " \
           + "{n_grid_z:d} {zspan_min:f} {zspan_max:f} " \
           + "{case} {Kreibig:f} {n_med:f} {n_core:f} {k_core:f} " \
           + "{n_coat:f} {k_coat:f}"
-    old_dir = abspath(os.curdir)
-    os.chdir(wdir)
+    old_dir = pathlib.Path.cwd()
+    os.chdir(str(wdir))
 
     kwargs["pathbhfield"] = get_binary(arp=arp)
 
@@ -297,10 +287,10 @@ def run_simulation(wdir=".", arp=True, **kwargs):
         kwargs["mpdigit"] = ""
 
     # run simulation with kwargs
-    sp.check_output(cmd.format(**kwargs), shell=True).decode("utf-8")
+    sp.check_output(cmd.format(**kwargs), shell=True)
 
     # Go back to orgignal directory before checking (checking might fail)
-    os.chdir(old_dir)
+    os.chdir(str(old_dir))
 
     # Check bhdebug.txt to make sure that you specify enough digits to
     # overcome roundoff errors.
@@ -312,11 +302,9 @@ def check_simulation(wdir):
     Check bhdebug.txt to make sure that you specify enough digits to
     overcome roundoff errors.
     """
-    outfile = join(abspath(wdir), "bhdebug.log")
-    field = join(abspath(wdir), "V_0Ereim.dat")
-    if os.path.exists(outfile) and os.path.exists(field):
-        with open(outfile) as fd:
-            fd.readlines()
-    else:
-        raise OSError(
-            "Could not run simulation, try with arbitrary precision.")
+    wdir = pathlib.Path(wdir)
+    field = wdir / "V_0Ereim.dat"
+    if not (field.exists() and
+            field.stat().st_size > 130):
+        msg = "Output {} does not exist or is too small!".format(field)
+        raise BHFIELDExecutionError(msg)

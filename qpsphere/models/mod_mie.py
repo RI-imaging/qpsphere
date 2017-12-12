@@ -1,12 +1,13 @@
+import nrefocus
 import numpy as np
 import qpimage
 
 from ._bhfield import simulate_sphere
 
 
-def mie(radius=5, sphere_index=1.339, medium_index=1.333,
-        wavelength=550e-9, pixel_size=.1, grid_size=(80, 80),
-        center=(40, 40), arp=True):
+def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
+        wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
+        center=(39.5, 39.5), arp=True):
     """Mie-simulated field behind a dielectric sphere (BHFIELD)
 
     Parameters
@@ -37,8 +38,17 @@ def mie(radius=5, sphere_index=1.339, medium_index=1.333,
     radius_um = radius * 1e6  # radius of sphere in um
     propd_um = radius_um  # simulate propagation through full sphere
     propd_lamd = radius / wavelength  # radius in wavelengths
-    size_um = np.array(grid_size) * pixel_size * 1e6
     wave_nm = wavelength * 1e9
+    # Qpsphere models define the position of the sphere with an index in
+    # the array (because it is easier to work with). The pixel
+    # indices run from (0, 0) to grid_size (without endpoint). BHFIELD
+    # requires the extent to be given in µm. The distance in µm between
+    # first and last pixel (measured from pixel center) is
+    # (grid_size -1) * pixel_size,
+    size_um = (np.array(grid_size) - 1) * pixel_size * 1e6
+    # The same holds for the offset. If we use size_um here,
+    # we already take into account the half-pixel offset.
+    offset_um = np.array(center) * pixel_size * 1e6 - size_um / 2
 
     kwargs = {"radius_sphere_um": radius_um,
               "refractive_index_medium": medium_index,
@@ -47,12 +57,18 @@ def mie(radius=5, sphere_index=1.339, medium_index=1.333,
               "wavelength_nm": wave_nm,
               "size_simulation_um": size_um,
               "size_grid": grid_size,
-              "offset_x_um": center[0],
-              "offset_y_um": center[1]}
+              "offset_x_um": offset_um[0],
+              "offset_y_um": offset_um[1]}
 
     background = np.exp(1j * 2 * np.pi * propd_lamd * medium_index)
 
     field = simulate_sphere(arp=arp, **kwargs) / background
+
+    # refocus
+    refoc = nrefocus.refocus(field,
+                             d=-(radius / pixel_size),
+                             nm=medium_index,
+                             res=wavelength / pixel_size)
 
     meta_data = {"pixel size": pixel_size,
                  "wavelength": wavelength,
@@ -62,6 +78,6 @@ def mie(radius=5, sphere_index=1.339, medium_index=1.333,
                  "sim index": sphere_index,
                  }
 
-    qpi = qpimage.QPImage(data=field, which_data="field",
+    qpi = qpimage.QPImage(data=refoc, which_data="field",
                           meta_data=meta_data)
     return qpi

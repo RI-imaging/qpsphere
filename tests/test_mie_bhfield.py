@@ -1,9 +1,9 @@
-from qpsphere.models._bhfield.fetch import get_binary
+from qpsphere.models import _bhfield as bh
 
 
 def test_get_binary():
-    path1 = get_binary(arp=False)
-    path2 = get_binary(arp=True)
+    path1 = bh.fetch.get_binary(arp=False)
+    path2 = bh.fetch.get_binary(arp=True)
     assert path1.exists()
     assert path2.exists()
 
