@@ -88,15 +88,16 @@ def md5sum(binary, blocksize=65536):
 
 
 def download_binary(url, dest, md5, retries=3):
+    print("qpimage: Downloading '{}', please wait.".format(dest.name))
     for rr in range(retries):
         if dest.exists():
             os.remove(str(dest))
         try:
             urlretrieve(url, dest)
         except BaseException:
-            print("Download of {} failed ({}/{})".format(url,
-                                                         rr + 1,
-                                                         retries))
+            print("qpimage: Download of {} failed ({}/{})".format(url,
+                                                                  rr + 1,
+                                                                  retries))
             continue
         else:
             break
