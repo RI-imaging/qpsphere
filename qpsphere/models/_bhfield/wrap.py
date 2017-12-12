@@ -16,8 +16,8 @@ class BHFIELDExecutionError(BaseException):
     pass
 
 
-def clear_temp(wdir="."):
-    """ Remove all files in wdir"""
+def clear_temp(wdir=".", rmdir=True):
+    """Remove all files in wdir"""
     wdir = pathlib.Path(wdir)
     extensions = ["*.log", "*.dat", "*.txt"]
 
@@ -25,7 +25,8 @@ def clear_temp(wdir="."):
         for ff in wdir.glob(ext):
             ff.unlink()
 
-    wdir.rmdir()
+    if rmdir:
+        wdir.rmdir()
 
 
 def load_field(wdir=".", size_grid=None):
@@ -119,11 +120,11 @@ def load_field(wdir=".", size_grid=None):
 
 
 def simulate_sphere(radius_sphere_um=2.5,
-                    size_simulation_um=(5, 5),
-                    size_grid=50,
+                    size_simulation_um=(7, 7),
+                    size_grid=(50, 50),
                     refractive_index_medium=1.0,
-                    refractive_index_sphere=1.001,
-                    measurement_position_um=3.0,
+                    refractive_index_sphere=1.01,
+                    measurement_position_um=2.5,
                     wavelength_nm=500,
                     offset_x_um=0,
                     offset_y_um=0,
@@ -133,11 +134,11 @@ def simulate_sphere(radius_sphere_um=2.5,
     ----------
     radius_sphere_um : float
         radius of sphere in um
-    size_simulation_um : float or tuple of floats
+    size_simulation_um : tuple of floats
         Size of simulation volume in lateral dimension in um.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
-    size_grid : int or tuple
+    size_grid : tuple of ints
         grid points in each lateral dimension.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
@@ -282,7 +283,7 @@ def run_simulation(wdir=".", arp=True, **kwargs):
     kwargs["pathbhfield"] = get_binary(arp=arp)
 
     if arp:
-        kwargs["mpdigit"] = 5
+        kwargs["mpdigit"] = 16
     else:
         kwargs["mpdigit"] = ""
 
