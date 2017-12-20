@@ -1,5 +1,4 @@
 """BHFIELD sphere wrapper"""
-import numbers
 import os
 import pathlib
 import subprocess as sp
@@ -16,7 +15,7 @@ class BHFIELDExecutionError(BaseException):
     pass
 
 
-def clear_temp(wdir=".", rmdir=True):
+def clear_temp(wdir, rmdir=True):
     """Remove all files in wdir"""
     wdir = pathlib.Path(wdir)
     extensions = ["*.log", "*.dat", "*.txt"]
@@ -29,8 +28,19 @@ def clear_temp(wdir=".", rmdir=True):
         wdir.rmdir()
 
 
-def load_field(wdir=".", size_grid=None):
+def load_field(wdir, shape_grid):
     """Extract electric field from simulation file "V_0Ereim.dat"
+
+    Parameters
+    ----------
+    wdir: str or pathlib.Path
+        path to the working directory
+    shape_grid: tuple of ints
+        the shape of the simulation data grid
+
+    Notes
+    -----
+    These are the files present in the working directory
 
     bhfield.log:
         log file containing scattering coeffs etc
@@ -95,33 +105,22 @@ def load_field(wdir=".", size_grid=None):
 
     a = np.loadtxt(str(field_file))
 
-    if size_grid is None:
-        x = a[:, 0]
-        # y = a[:,1]
-        # z = a[:,2]
-        size_grid = int(np.sqrt(len(x)))
-
-    if isinstance(size_grid, numbers.Real):
-        size_grid = np.array((size_grid, size_grid), dtype=int)
-
-    assert size_grid[0] == int(
-        size_grid[0]), "resulting x-size is not an integer"
-    assert size_grid[1] == int(
-        size_grid[1]), "resulting y-size is not an integer"
-
-    size_grid = np.array(size_grid, dtype=int)
+    assert shape_grid[0] == int(
+        shape_grid[0]), "resulting x-size is not an integer"
+    assert shape_grid[1] == int(
+        shape_grid[1]), "resulting y-size is not an integer"
 
     Ex = a[:, 3] + 1j * a[:, 6]
     # Ey = a[:,4] + 1j*a[:,7]
     # Ez = a[:,5] + 1j*a[:,8]
 
-    Exend = Ex.reshape((size_grid[1], size_grid[0])).transpose()
+    Exend = Ex.reshape((shape_grid[1], shape_grid[0])).transpose()
     return Exend
 
 
 def simulate_sphere(radius_sphere_um=2.5,
-                    size_simulation_um=(7, 7),
-                    size_grid=(50, 50),
+                    size_simulation_um=[7, 7],
+                    shape_grid=(50, 50),
                     refractive_index_medium=1.0,
                     refractive_index_sphere=1.01,
                     measurement_position_um=2.5,
@@ -134,11 +133,11 @@ def simulate_sphere(radius_sphere_um=2.5,
     ----------
     radius_sphere_um : float
         radius of sphere in um
-    size_simulation_um : tuple of floats
+    size_simulation_um : list of floats
         Size of simulation volume in lateral dimension in um.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
-    size_grid : tuple of ints
+    shape_grid : tuple of ints
         grid points in each lateral dimension.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
@@ -162,15 +161,15 @@ def simulate_sphere(radius_sphere_um=2.5,
 
     # The size of the simulation must be zero
     # if there is only one grid point.
-    if size_grid[0] == 1:
+    if shape_grid[0] == 1:
         sizeum[0] = 0
-    if size_grid[1] == 1:
+    if shape_grid[1] == 1:
         sizeum[1] = 0
 
-    assert np.allclose(size_grid[0], int(
-        size_grid[0])), "resulting x-size is not an integer"
-    assert np.allclose(size_grid[1], int(
-        size_grid[1])), "resulting y-size is not an integer"
+    assert np.allclose(shape_grid[0], int(
+        shape_grid[0])), "resulting x-size is not an integer"
+    assert np.allclose(shape_grid[1], int(
+        shape_grid[1])), "resulting y-size is not an integer"
 
     while True:
         # create temp dir
@@ -182,10 +181,10 @@ def simulate_sphere(radius_sphere_um=2.5,
                            wl=wavelength_um,
                            r_core=radius_sphere_um,
                            r_coat=radius_sphere_um,
-                           n_grid_x=int(size_grid[0]),
+                           n_grid_x=int(shape_grid[0]),
                            xspan_min=-sizeum[0] / 2 - offset_x_um,
                            xspan_max=sizeum[0] / 2 - offset_x_um,
-                           n_grid_y=int(size_grid[1]),
+                           n_grid_y=int(shape_grid[1]),
                            yspan_min=-sizeum[1] / 2 - offset_y_um,
                            yspan_max=sizeum[1] / 2 - offset_y_um,
                            n_grid_z=1,
@@ -202,21 +201,21 @@ def simulate_sphere(radius_sphere_um=2.5,
             if arp:
                 raise
             else:
-                msg = "bhfield: Standard precision failed. " +\
-                    "Trying with arbitrary precision."
+                msg = "bhfield: Standard precision failed. " \
+                      + "Retrying with arbitrary precision."
                 warnings.warn(msg)
                 arp = True
             clear_temp(wdir=wdir)
         else:
             break
 
-    result = load_field(wdir=wdir, size_grid=size_grid)
+    result = load_field(wdir=wdir, shape_grid=shape_grid)
     clear_temp(wdir=wdir)
 
     return result
 
 
-def run_simulation(wdir=".", arp=True, **kwargs):
+def run_simulation(wdir, arp=True, **kwargs):
     """
     Example
     -------

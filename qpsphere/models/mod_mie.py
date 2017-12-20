@@ -56,7 +56,7 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
               "measurement_position_um": propd_um,
               "wavelength_nm": wave_nm,
               "size_simulation_um": size_um,
-              "size_grid": grid_size,
+              "shape_grid": grid_size,
               "offset_x_um": offset_um[0],
               "offset_y_um": offset_um[1]}
 
