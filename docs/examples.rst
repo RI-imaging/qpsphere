@@ -6,4 +6,9 @@ Examples
   :maxdepth: 2
 
 
+Refractive index and radius determination
+-----------------------------------------
+
 .. fancy_include:: cell_edge.py
+
+.. fancy_include:: imagefit_projection.py

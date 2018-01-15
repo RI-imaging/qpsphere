@@ -29,7 +29,7 @@ def analyze(qpi, r0, edgekw={}, ret_center=False, ret_edge=False):
     r0: float
         Approximate radius of the sphere [m]
     edgekw: dict
-        Additional keyword arguments for `contour_canny`
+        Additional keyword arguments for :func:`contour_canny`
     ret_center: bool
         Return the center coordinate of the sphere
 

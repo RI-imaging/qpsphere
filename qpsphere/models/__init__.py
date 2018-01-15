@@ -3,7 +3,7 @@ import numpy as np
 from .mod_mie import mie
 from .mod_proj import projection
 
-
+#: available light-scattering models
 available = {"mie": mie,
              "projection": projection,
              }

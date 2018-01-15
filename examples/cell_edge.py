@@ -1,4 +1,4 @@
-"""Refractive index determination for a single cell
+"""OPD edge-detection approach with a single cell
 
 This example illustrates how qpsphere can be used to determine
 the radius and the refractive index of a spherical cell.
@@ -73,12 +73,12 @@ ax2.imshow(edgeplot.T, cmap="gray_r", interpolation="none")
 # fitted circle center
 plt.plot(cx, cy, "xr", alpha=.5)
 # fitted circle perimeter
-circle = plt.Circle((cx, cy), r/qpi["pixel size"],
+circle = plt.Circle((cx, cy), r / qpi["pixel size"],
                     color='r', fill=False, ls="dashed", lw=2, alpha=.5)
 ax2.add_artist(circle)
 # fitting results as text
-info = "n={:.4F}\nr={:.2f}µm".format(n, r*1e6)
-ax2.text(.8, .8, info, color="w", fontsize="13", verticalalignment="top")
+info = "n={:.4F}\nr={:.2f}µm".format(n, r * 1e6)
+ax2.text(.8, .8, info, color="w", fontsize="12", verticalalignment="top")
 plt.colorbar(map2, ax=ax2, fraction=.048, pad=0.04)
 # disable axes
 [ax.axis("off") for ax in [ax1, ax2]]

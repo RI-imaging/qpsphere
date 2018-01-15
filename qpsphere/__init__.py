@@ -1,19 +1,18 @@
 from ._version import version as __version__  # noqa: F401
-from . import edgefit  # noqa: F401
+from . import edgefit
+from . import imagefit
+from . import models  # noqa: F401
 from .models import simulate  # noqa: F401
 
 
-def analyze(qpi, n0=None, r0=None, method="edge", model="projection",
-            ret_center=False, edgekw={}, imagekw={}):
+def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
+            ret_center=False, ret_pha_offset=False, ret_qpi=False):
     """Determine refractive index and radius of a spherical object
 
     Parameters
     ----------
     qpi: QPImage
-        Quantitative phase image information
-    n0: float
-        Approximate refractive index of the phase object,
-        estimated with the edge-detection approach if not given
+        Quantitative phase image data
     r0: float
         Approximate radius of the sphere [m]
     method: str
@@ -26,9 +25,18 @@ def analyze(qpi, n0=None, r0=None, method="edge", model="projection",
         `method` is "edge", only "projection" is allowed.
         If `method` is "image", `model` can be one of
         "mie", "projection", "rytov", or "rytov-sc".
-
+    edgekw: dict
+        Keyword arguments for tuning the edge detection algorithm,
+        see :func:`qpsphere.edgefit.contour_canny`.
+    imagekw: dict
+        Keyword arguments for tuning the image fitting algorithm,
+        see :func:`qpsphere.imagefit.alg.match_phase`
     ret_center: bool
-        Return the center coordinate of the sphere
+        If True, return the center coordinate of the sphere.
+    ret_pha_offset: bool
+        If True, return the phase image background offset.
+    ret_qpi: bool
+        If True, return the modeled data as a :class:`qpimage.QPImage`.
 
     Returns
     -------
@@ -36,20 +44,55 @@ def analyze(qpi, n0=None, r0=None, method="edge", model="projection",
         Computed refractive index
     r: float
         Computed radius [m]
-    center: tuple of floats
-        Center position of the sphere [px], only returned
-        if `ret_center` is `True`
+    c: tuple of floats
+        Only returned if `ret_center` is True
+        Center position of the sphere [px]
+    pha_offset: float
+        Only returned if `ret_pha_offset` is True
+        Phase image background offset
+    qpi_sim: qpimage.QPImage
+        Only returned if `ret_qpi` is True
+        Modeled data
+
+    Notes
+    -----
+    If `method` is "image", then the "edge" method is used
+    as a first step to estimate initial parameters for radius,
+    refractive index, and position of the sphere using `edgekw`.
+    If this behavior is not desired, please make use of the
+    method :func:`qpsphere.imagefit.analyze`.
     """
     if method == "edge":
         if model != "projection":
             raise ValueError("`method='edge'` requires `model='projection'`!")
-        if r0 is None:
-            raise ValueError("`method='edge'` requires estimate of `r0`!")
-        return edgefit.analyze(qpi=qpi,
+        res = edgefit.analyze(qpi=qpi,
+                              r0=r0,
+                              edgekw=edgekw,
+                              ret_center=ret_center,
+                              ret_edge=False,
+                              )
+        if ret_pha_offset:
+            res.append(0)
+        if ret_qpi:
+            raise NotImplementedError("ret_qpi not implemented for edge")
+    elif method == "image":
+        n0, r0, c0 = edgefit.analyze(qpi=qpi,
+                                     r0=r0,
+                                     edgekw=edgekw,
+                                     ret_center=True,
+                                     ret_edge=False,
+                                     )
+        res = imagefit.analyze(qpi=qpi,
+                               model=model,
+                               n0=n0,
                                r0=r0,
-                               edgekw=edgekw,
+                               c0=c0,
+                               imagekw=imagekw,
                                ret_center=ret_center,
-                               ret_edge=False,
+                               ret_pha_offset=ret_pha_offset,
+                               ret_qpi=ret_qpi
                                )
     else:
-        raise NotImplementedError("2D phase image fit not yet available!")
+        raise NotImplementedError("`method` must be 'edge' or 'image'!")
+
+    return res
