@@ -1,4 +1,4 @@
-"""OPD projection approach applied to an OPD simulation
+"""OPD projection image fit applied to an OPD simulation
 
 This examples illustrates how the refractive index and radius of
 a sphere can be determined using the 2D phase fitting algorithm.
