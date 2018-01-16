@@ -46,3 +46,36 @@ available to other research groups.
 QPsphere makes heavy use of `qpimage <https://qpimage.readthedocs.io/en/stable)>`_,
 a resourceful QPI image manager and is a key component of our QPI analysis
 software `DryMass <https://drymass.readthedocs.io/en/stable)>`_.
+
+
+Citing qpsphere
+===============
+If you are using qpsphere in a scientific publication, please
+cite it with:
+
+::
+
+  (...) using qpsphere version X.X.X (available at
+  https://pypi.python.org/pypi/qpsphere).
+
+or in a bibliography
+
+::
+  
+  Paul Müller (2017), qpsphere version X.X.X: Phase image analysis
+  [Software]. Available at https://pypi.python.org/pypi/qpsphere.
+
+and replace ``X.X.X`` with the version of qpsphere that you used.
+
+
+Furthermore, several ideas implemented in qpsphere have been described
+and published in scientific journals:
+
+- Retrieval of RI and radius using the OPD edge-detection approach
+  is described in :cite:`Schuermann2015` and :cite:`Schuermann2016`
+  (``method="edge"`` in :func:`qpsphere.analyze`).
+
+- Retrieval of RI and radius by fitting 2D models (OPD projection,
+  Rytov approximation, systematically corrected Rytov approximation,
+  Mie) to phase images is described in :cite:`Mueller2018`.
+  (``method="image"`` in :func:`qpsphere.analyze`).
