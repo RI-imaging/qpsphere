@@ -78,4 +78,5 @@ and published in scientific journals:
 - Retrieval of RI and radius by fitting 2D models (OPD projection,
   Rytov approximation, systematically corrected Rytov approximation,
   Mie) to phase images is described in :cite:`Mueller2018`.
-  (``method="image"`` in :func:`qpsphere.analyze`).
+  (``method="image"`` in :func:`qpsphere.analyze` and the corresponding
+  scattering models in :mod:`qpsphere.models`).
