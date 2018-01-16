@@ -33,24 +33,27 @@ meters). If the experimental data file format is supported by
    n, r = qpsphere.analyze(qpi=qpi_object,
                            # estimate of the object's radius in meters
                            r0=10e-6,
-                           # edge-based approach
+                           # OPD edge-detection approach
                            method="edge"
+                           # OPD projection model
+                           model="projection"
                            )
 
-where ``n`` is the average refractive index and ``r`` is the radius
-of the object in meters.
+where ``n`` is the average refractive index (RI) and ``r`` is the radius
+of the object in meters estimated by the optical path difference (OPD)
+edge-detection approach.
 
 Choosing method and model
 -------------------------
-Although the edge-based approach is fast, it is inaccurate because it
-is resolution-dependent and because it is based on a phase projection
-model. Higher accuracy can be achieved by fitting a 2D model to the
-experimental phase image. Several models are available in qpsphere:
+Although the OPD edge-detection approach is fast, it is inaccurate because it
+is resolution-dependent and because it approximates light scattering by an
+integral over the RI along straight lines. Higher accuracy can be achieved
+by fitting a 2D model to the experimental phase image. When setting
+``method="image"`` in the example above, the following models are available:
 
-- "mie": an Mie model, polarization-averaged
-- "projection": a simple optical path difference projection model
+- "mie": a Mie model, polarization-averaged
+- "projection": an OPD projection model
 - "rytov": the Rytov approximation
-- "rytov-sc": a systematically corrected Rytov approximation
+- "rytov-sc": the systematically corrected Rytov approximation for spherical objects
 
-We are currently preparing a manuscript with a detailed description
-of these models.
+A comparison of these algorithms can be found in :cite:`Mueller2018`.

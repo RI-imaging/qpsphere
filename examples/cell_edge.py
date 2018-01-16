@@ -7,20 +7,12 @@ recorded using digital holographic microscopy (DHM).
 In the quantitative phase image on the right, the detected cell
 contour (white) and the subsequent circle fit (red) as well as the
 resulting average radius and refractive index of the the cell
-are shown. The setup used for recording this data is described in [1]_,
-which also contains a description of the basic steps to determine
-the position and radius of the cell and to subsequently compute
-the average refractive index from the experimental phase data.
-The experimental data is loaded and background-corrected using
-:py:mod:`qpimage`.
-
-
-.. [1] M. Schürmann, J. Scholze, P. Müller, C.J. Chan, A.E. Ekpenyong,
-   K. Chalut, J. Guck, *Refractive index measurements of single,
-   spherical cells using digital holographic microscopy* in Biophysical
-   Methods in Cell Biology (ed. E.K. Paluch) 2015,
-   `DOI:10.1016/bs.mcb.2014.10.016
-   <https://dx.doi.org/10.1016/bs.mcb.2014.10.016>`_
+are shown. The setup used for recording this data is described in
+:cite:`Schuermann2015` which also contains a description of the
+basic steps to determine the position and radius of the cell and
+to subsequently compute the average refractive index from the
+experimental phase data. The experimental data is loaded and
+background-corrected using :py:mod:`qpimage`.
 """
 import matplotlib
 import matplotlib.pylab as plt
