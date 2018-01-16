@@ -35,7 +35,9 @@ from a single phase measurement. The equation above then reduces to
 
 with the lateral position of the sphere :math:`(x_0, y_0)`. Note that this approach is
 often applied to suspended (spherical) cells. Even though cells are complex structured
-objects, this approach yields good estimates for the average RI and radius.  
+objects, this approach yields good estimates for the average RI and radius. Qpsphere
+offers several approaches to address this decoupling problem, ranging from simple
+edge-detection to image fits with a 2D Mie model.
 
 
 Why qpsphere?
