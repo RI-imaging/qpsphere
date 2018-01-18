@@ -207,7 +207,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
             if np.isnan(phai_offset):
                 phai_offset = 0
 
-            spi.phai_offset = - phai_offset
+            spi.pha_offset = - phai_offset
 
         if verbose == 1:
             print("Iteration {}: n={:.5e}, r={:.5e}m".format(ii,

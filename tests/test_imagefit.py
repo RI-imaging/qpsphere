@@ -25,9 +25,9 @@ def test_basic():
 
     assert np.abs(n - n_fit) < 4e-6
     assert np.abs(r - r_fit) < 1.5e-9
-    assert np.abs(c[0] - c_fit[0]) < 2.5e-3
-    assert np.abs(c[1] - c_fit[1]) < 2.5e-3
-    assert np.allclose(qpi.pha, qpi_fit.pha, atol=0.0026, rtol=0)
+    assert np.abs(c[0] - c_fit[0]) < 2.7e-3
+    assert np.abs(c[1] - c_fit[1]) < 2.7e-3
+    assert np.allclose(qpi.pha, qpi_fit.pha, atol=0.0031, rtol=0)
 
 
 if __name__ == "__main__":
