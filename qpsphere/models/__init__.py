@@ -60,4 +60,5 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                 pixel_size=pixel_size,
                 grid_size=grid_size,
                 center=center)
+
     return qpi

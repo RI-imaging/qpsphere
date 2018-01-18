@@ -120,7 +120,8 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     ipltph = spinterp.interp1d(xo, np.unwrap(
         np.angle(field)), fill_value=0, **inpt_kwargs)
     ipltam = spinterp.interp1d(xo, np.abs(field), fill_value=1, **inpt_kwargs)
-    field2d = ipltam(r) * np.exp(1j * ipltph(r))
+    phase2d = ipltph(r)
+    field2d = ipltam(r) * np.exp(1j * phase2d)
 
     # Numerical refocusing
     # We need to perform numerical focusing with the upsampled array,
@@ -133,7 +134,11 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
 
     # Perform new interpolation on requested grid
     # We might introduce an offset here:
-    phase = unwrap.unwrap_phase(np.angle(refoc_field2d))
+    phase = unwrap.unwrap_phase(np.angle(refoc_field2d), seed=47)
+    # detect 2PI phase jump
+    pha_offset = np.average(phase[:3] - phase2d[:3])
+    num_2pi = np.round(pha_offset / (2 * np.pi))
+    phase -= num_2pi * 2 * np.pi
     ampli = np.abs(refoc_field2d)
     intpp = spinterp.RectBivariateSpline(x, y, phase, kx=1, ky=1)
     intpa = spinterp.RectBivariateSpline(x, y, ampli, kx=1, ky=1)
