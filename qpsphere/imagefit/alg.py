@@ -298,7 +298,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
     if ret_center:
         res += [[spi.posx_offset, spi.posy_offset]]
     if ret_pha_offset:
-        res += [spi.offset_phase]
+        res += [spi.pha_offset]
     if ret_qpi:
         res += [spi.compute_qpi()]
     if ret_num_iter:
