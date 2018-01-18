@@ -157,7 +157,8 @@ def simulate_sphere(radius_sphere_um=2.5,
     wavelength_um = wavelength_nm / 1000
 
     # size simulation tuple
-    sizeum = size_simulation_um
+    sizeum = list(size_simulation_um)
+    shape_grid = list(shape_grid)
 
     # The size of the simulation must be zero
     # if there is only one grid point.

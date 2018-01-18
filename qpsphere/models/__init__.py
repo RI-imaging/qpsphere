@@ -1,11 +1,15 @@
 import numpy as np
 
 from .mod_mie import mie
+from .mod_mie_avg import mie_avg
 from .mod_proj import projection
+from .mod_rytov import rytov
 
 #: available light-scattering models
 available = {"mie": mie,
+             "mie avg": mie_avg,
              "projection": projection,
+             "rytov": rytov,
              }
 
 

@@ -8,7 +8,7 @@ from ._bhfield import simulate_sphere
 def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
         center=(39.5, 39.5), arp=True):
-    """Mie-simulated field behind a dielectric sphere (BHFIELD)
+    """Mie-simulated field behind a dielectric sphere
 
     Parameters
     ----------
@@ -44,7 +44,7 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     # indices run from (0, 0) to grid_size (without endpoint). BHFIELD
     # requires the extent to be given in µm. The distance in µm between
     # first and last pixel (measured from pixel center) is
-    # (grid_size -1) * pixel_size,
+    # (grid_size - 1) * pixel_size,
     size_um = (np.array(grid_size) - 1) * pixel_size * 1e6
     # The same holds for the offset. If we use size_um here,
     # we already take into account the half-pixel offset.

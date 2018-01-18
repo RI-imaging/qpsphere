@@ -136,9 +136,13 @@ def circle_fit(edge, ret_dev=False):
 
     Returns
     -------
-    center, radius: tuple of floats, float
-        Coordinates of the circle. If `ret_dev` is True, then the
-        average deviation from the circle is also returned.
+    center: tuple of (float, float)
+        Coordinates of the circle center
+    radius: fload
+        Radius of the circle [px]
+    rdev:
+        Only returned if `ret_dev` is True
+        Average deviation of the radius from the circle
     """
     sx, sy = edge.shape
     x = np.linspace(0, sx, sx, endpoint=False).reshape(-1, 1)
