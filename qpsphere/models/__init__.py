@@ -47,12 +47,19 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Quantitative phase data set
     """
     if pixel_size is None:
+        # select simulation automatically
         rl = radius / wavelength
         if rl < 5:
+            # a lot of diffraction artifacts may occur;
+            # use 4x radius to capture the full field
             fact = 4
-        elif rl >=5 and rl <=10:
+        elif rl >= 5 and rl <= 10:
+            # linearly decrease towards 3x radius
             fact = 4 - (rl - 5) / 5
         else:
+            # not many diffraction artifacts occur;
+            # 3x radius is enough and allows to
+            # simulate larger radii with BHFIELD
             fact = 3
         pixel_size = fact * radius / np.min(grid_size)
 
