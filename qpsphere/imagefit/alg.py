@@ -9,9 +9,9 @@ from .interp import SpherePhaseInterpolator
 
 def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
                 fix_pha_offset=False, nrel=.10, rrel=.05, crel=.05,
-                stop_dn=.0005, stop_dr=.0010, stop_dc=.1, max_iter=100,
-                ret_center=False, ret_pha_offset=False, ret_qpi=False,
-                ret_num_iter=False, ret_interim=False,
+                stop_dn=.0005, stop_dr=.0010, stop_dc=.1, min_iter=3,
+                max_iter=100, ret_center=False, ret_pha_offset=False,
+                ret_qpi=False, ret_num_iter=False, ret_interim=False,
                 verbose=0, verbose_out_prefix="./verbose_out/field"
                 ):
     """Fit a scattering model to a quantitative phase image
@@ -60,6 +60,8 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         Stopping criterion for radius
     stop_dc: float
         Stopping criterion for lateral offsets
+    min_iter: int
+        Minimum number of fitting iterations to perform
     max_iter: int
         Maximum number of fitting iterations to perform
     ret_center: bool
@@ -218,14 +220,6 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
 
         interim.append([ii, spi.params])
 
-        if ii > max_iter:
-            ii *= -1
-            if verbose:
-                print("Stopping iteration: reached `max_iter`={}".format(
-                    max_iter))
-            message = "fail, reached maximum number of iterations"
-            break
-
         # update accuracies
         if (idn > range_ipol / 2 - range_ipol / 10 and
                 idn < range_ipol / 2 + range_ipol / 10):
@@ -241,6 +235,18 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
             dc /= 2
             if verbose > 1:
                 print("Halved search interval: dc={:.8f}".format(dc))
+
+        if ii < min_iter:
+            if verbose:
+                print("Keep iterating because `min_iter`={}.".format(min_iter))
+            continue
+        elif ii > max_iter:
+            ii *= -1
+            if verbose:
+                print("Stopping iteration: reached `max_iter`={}".format(
+                    max_iter))
+            message = "fail, reached maximum number of iterations"
+            break
 
         if stop_dc:
             # check movement of center location and enforce next iteration
