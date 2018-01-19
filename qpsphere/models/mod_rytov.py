@@ -71,7 +71,7 @@ def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                                       grid_size=grid_size_sim,
                                       lD=0,
                                       approx="rytov",
-                                      zeropad=5,
+                                      zeropad=3,
                                       oversample=1
                                       )
 
