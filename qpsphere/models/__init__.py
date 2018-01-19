@@ -34,7 +34,7 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Sphere model to use (see `available`)
     pixel_size: float or None
         Pixel size [m]; if set to `None` the pixel size is
-        chosen such that the radius fits at least four times
+        chosen such that the radius fits at least 3.5 times
         into the grid.
     center: tuple of floats or None
         Center position in image coordinates [px]; if set to
@@ -47,7 +47,7 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Quantitative phase data set
     """
     if pixel_size is None:
-        pixel_size = 4 * radius / np.min(grid_size)
+        pixel_size = 3.5 * radius / np.min(grid_size)
 
     if center is None:
         center = (np.array(grid_size) - 1) / 2
