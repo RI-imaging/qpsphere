@@ -9,7 +9,7 @@ from .interp import SpherePhaseInterpolator
 
 def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
                 fix_pha_offset=False, nrel=.10, rrel=.05, crel=.05,
-                stop_dn=.0005, stop_dr=.0010, stop_dc=.1, min_iter=3,
+                stop_dn=.0005, stop_dr=.0010, stop_dc=1, min_iter=3,
                 max_iter=100, ret_center=False, ret_pha_offset=False,
                 ret_qpi=False, ret_num_iter=False, ret_interim=False,
                 verbose=0, verbose_out_prefix="./verbose_out/field"
