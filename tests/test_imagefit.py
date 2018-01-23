@@ -14,7 +14,7 @@ def test_basic():
                             wavelength=550e-9,
                             grid_size=(s, s),
                             model="projection",
-                            pixel_size=3*r/s,
+                            pixel_size=3 * r / s,
                             center=c)
 
     # fit simulation with projection model

@@ -4,12 +4,14 @@ from .mod_mie import mie
 from .mod_mie_avg import mie_avg
 from .mod_proj import projection
 from .mod_rytov import rytov
+from .mod_rytov_sc import rytov_sc
 
 #: available light-scattering models
 available = {"mie": mie,
              "mie avg": mie_avg,
              "projection": projection,
              "rytov": rytov,
+             "rytov sc": rytov_sc,
              }
 
 

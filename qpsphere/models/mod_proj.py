@@ -12,7 +12,7 @@ def projection(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     radius: float
         Radius of the sphere [m]
     sphere_index: float
-        Refractive index of the object
+        Refractive index of the sphere
     medium_index: float
         Refractive index of the surrounding medium
     wavelength: float

@@ -1,6 +1,6 @@
 0.1.3
  - added 2D phase fitting algorithm (method='image')
- - added Mie average and Rytov models
+ - added Mie average, Rytov, and Rytov-SC models
 0.1.2
  - updated default keyword arguments for sphere models
  - added Mie model (based on BHFIELD) (#1)

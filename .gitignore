@@ -101,3 +101,5 @@ ENV/
 .mypy_cache/
 
 _version_save.py
+
+.bib.bak
