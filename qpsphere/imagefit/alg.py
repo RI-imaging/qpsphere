@@ -41,11 +41,11 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         - below 1% of the modeled phase and
         - within a 5px or 20% border (depending on which is larger)
           around the phase image.
-    nrel : float
+    nrel: float
         Determines the border of the interpolation range for the
         refractive index: [n-(n-nmed)*nrel, n+(n-nmed)*nrel]
         with nmed=qpi["medium_index"] and, initially, n=n0.
-    rrel : float
+    rrel: float
         Determines the border of the interpolation range for the
         radius: [r*(1-rrel), r*(1+rrel)] with, initially, r=r0.
     crel: float

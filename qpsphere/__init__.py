@@ -65,16 +65,27 @@ def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
     if method == "edge":
         if model != "projection":
             raise ValueError("`method='edge'` requires `model='projection'`!")
-        res = edgefit.analyze(qpi=qpi,
-                              r0=r0,
-                              edgekw=edgekw,
-                              ret_center=ret_center,
-                              ret_edge=False,
-                              )
+        n, r, c = edgefit.analyze(qpi=qpi,
+                                  r0=r0,
+                                  edgekw=edgekw,
+                                  ret_center=True,
+                                  ret_edge=False,
+                                  )
+        res = [n, r]
+        if ret_center:
+            res.append(c)
         if ret_pha_offset:
             res.append(0)
         if ret_qpi:
-            raise NotImplementedError("ret_qpi not implemented for edge")
+            qpi_sim = simulate(radius=r,
+                               sphere_index=n,
+                               medium_index=qpi["medium index"],
+                               wavelength=qpi["wavelength"],
+                               grid_size=qpi.shape,
+                               model="projection",
+                               pixel_size=qpi["pixel size"],
+                               center=c)
+            res.append(qpi_sim)
     elif method == "image":
         n0, r0, c0 = edgefit.analyze(qpi=qpi,
                                      r0=r0,
