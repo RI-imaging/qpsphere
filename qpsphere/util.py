@@ -5,9 +5,10 @@ import shutil
 
 from .models import _bhfield
 
-
+#: User's cache directory
 CACHE_PATH = pathlib.Path(
     appdirs.AppDirs(appname="python-qpsphere").user_cache_dir)
+#: Qpsphere package `resources` directory.
 RESCR_PATH = pathlib.Path(resource_filename("qpsphere", "resources"))
 
 
@@ -26,9 +27,9 @@ def download_binaries(package_dir=False):
     Returns
     -------
     paths: list of pathlib.Path
-        List of binary paths. This will always return binaries in
-        the package directory (if present), disregarding the
-        parameter `package_dir`.
+        List of paths to binaries. This will always return binaries in
+        the `resources` directory of the qpsphere package (if binaries
+        are present there), in disregard of the parameter `package_dir`.
     """
     # bhfield
     # make sure the binary is available on the system
@@ -51,7 +52,15 @@ def download_binaries(package_dir=False):
 
 
 def remove_binaries(package_dir=False):
-    """Remove all binaries for the current platform"""
+    """Remove all binaries for the current platform
+
+    Parameters
+    ----------
+    package_dir: bool
+        If True, remove all binaries from the `resources`
+        directory of the qpsphere package. If False,
+        remove all binaries from the user's cache directory.
+    """
     paths = []
 
     if package_dir:

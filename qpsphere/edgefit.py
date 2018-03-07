@@ -15,7 +15,7 @@ class EdgeDetectionWarning(Warning):
 
 
 def analyze(qpi, r0, edgekw={}, ret_center=False, ret_edge=False):
-    """Determine Refractive index and radius using Canny edge detection
+    """Determine refractive index and radius using Canny edge detection
 
     Compute the refractive index of a spherical phase object by
     detection of an edge in the phase image, a subsequent circle
@@ -71,7 +71,7 @@ def analyze(qpi, r0, edgekw={}, ret_center=False, ret_edge=False):
 
 
 def average_sphere(image, center, radius, weighted=True, ret_crop=False):
-    """Compute weighted phase number from a 2D phase image of a sphere
+    """Compute the weighted average phase from a phase image of a sphere
 
     Parameters
     ----------
@@ -168,6 +168,28 @@ def circle_fit(edge, ret_dev=False):
 
 
 def circle_radii(params, xedge, yedge):
+    """Compute the distance to the center from cartesian coordinates
+
+    This method is used for fitting a circle to a set of contour
+    points.
+
+    Parameters
+    ----------
+    params: lmfit.Parameters
+        Must contain the keys:
+
+        - "cx": origin of x coordinate [px]
+        - "cy": origin of y coordinate [px]
+    xedge: 1D np.ndarray
+        Edge coordinates x [px]
+    yedge: 1D np.ndarray
+        Edge coordinates y [px]
+
+    Returns
+    -------
+    radii: 1D np.ndarray
+        Radii corresponding to edge coordinates relative to origin
+    """
     cx = params["cx"].value
     cy = params["cy"].value
     radii = np.sqrt((cx - xedge)**2 + (cy - yedge)**2)
@@ -175,6 +197,25 @@ def circle_radii(params, xedge, yedge):
 
 
 def circle_residual(params, xedge, yedge):
+    """Residuals for circle fitting
+
+    Parameters
+    ----------
+    params: lmfit.Parameters
+        Must contain the keys:
+
+        - "cx": origin of x coordinate [px]
+        - "cy": origin of y coordinate [px]
+    xedge: 1D np.ndarray
+        Edge coordinates x [px]
+    yedge: 1D np.ndarray
+        Edge coordinates y [px]
+
+    Returns
+    -------
+    rad_dev: 1D np.ndarray
+        Deviation of radii from average radius
+    """
     radii = circle_radii(params, xedge, yedge)
     return radii - np.mean(radii)
 

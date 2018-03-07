@@ -39,3 +39,8 @@ models (Scattering models)
    :undoc-members:
 
 
+util (Helper methods)
+==========================
+.. automodule:: qpsphere.util
+   :members:
+   :undoc-members:
