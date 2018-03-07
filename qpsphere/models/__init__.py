@@ -33,7 +33,7 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     grid_size: tuple of floats
         Resulting image size in x and y [px]
     model: str
-        Sphere model to use (see `available`)
+        Sphere model to use (see :const:`available`)
     pixel_size: float or None
         Pixel size [m]; if set to `None` the pixel size is
         chosen such that the radius fits at least three to

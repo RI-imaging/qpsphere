@@ -5,13 +5,13 @@ def analyze(qpi, model, n0, r0, c0=None, imagekw={},
             ret_center=False, ret_pha_offset=False, ret_qpi=False):
     """Fit refractive index and radius to a phase image of a sphere
 
-    Compute the refractive index of a sphere by fitting a
-    scattering model to its phase image.
-
     Parameters
     ----------
     qpi: QPImage
         Quantitative phase image information
+    model: str
+        Name of the light-scattering model
+        (see :const:`qpsphere.models.available`)
     n0: float
         Approximate refractive index of the sphere
     r0: float
@@ -20,8 +20,8 @@ def analyze(qpi, model, n0, r0, c0=None, imagekw={},
         Approximate center position in ndarray index coordinates [px];
         if set to `None` (default), the center of the image is used.
     imagekw: dict
-        Keyword arguments for
-        :func:`qpimage.imagefit.alg.match_phase`
+        Additional keyword arguments to
+        :func:`qpsphere.imagefit.alg.match_phase`.
     ret_center: bool
         Return the center coordinate of the sphere
     ret_pha_offset: bool

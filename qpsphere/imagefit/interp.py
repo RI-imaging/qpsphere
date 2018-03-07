@@ -48,18 +48,26 @@ class SpherePhaseInterpolator(object):
         """
         self.verbose = verbose
 
+        #: scattering model
         self.model = model
+        #: scattering model function
         self.sphere_method = models.available[model]
+        #: scattering model keyword arguments
         self.model_kwargs = model_kwargs
-
+        #: current sphere radius [m]
         self.radius = model_kwargs["radius"]
+        #: current sphere index
         self.sphere_index = model_kwargs["sphere_index"]
+        #: current background phase offset
         self.pha_offset = pha_offset
+        #: current pixel offset in x
         self.posx_offset = model_kwargs["center"][0]
+        #: current pixel offset in y
         self.posy_offset = model_kwargs["center"][1]
-
+        #: half of current search interval size for refractive index
         self.dn = abs(
             (self.sphere_index - model_kwargs["medium_index"]) * nrel)
+        #: half of current search interval size for radius [m]
         self.dr = self.radius * rrel
 
         # dictionary for determining if a new phase image
@@ -70,8 +78,52 @@ class SpherePhaseInterpolator(object):
         # border phase images
         self._border_pha = {}
 
-    def get_border_phase(self, idn=0, idr=0):
+    @property
+    def params(self):
+        """Current interpolation parameter dictionary"""
+        par = {"radius": self.radius,
+               "sphere_index": self.sphere_index,
+               "pha_offset": self.pha_offset,
+               "center": [self.posx_offset, self.posy_offset]
+               }
+        return par
+
+    @property
+    def range_n(self):
+        """Current interpolation range of refractive index"""
+        return self.sphere_index - self.dn, self.sphere_index + self.dn
+
+    @property
+    def range_r(self):
+        """Current interpolation range of radius"""
+        return self.radius - self.dr, self.radius + self.dr
+
+    def compute_qpi(self):
+        """Compute model data with current parameters
+
+        Returns
+        -------
+        qpi: qpimage.QPImage
+            Modeled phase data
+
+        Notes
+        -----
+        The model image might deviate from the fitted image
+        because of interpolation during the fitting process.
         """
+        kwargs = self.model_kwargs.copy()
+        kwargs["radius"] = self.radius
+        kwargs["sphere_index"] = self.sphere_index
+        kwargs["center"] = [self.posx_offset, self.posy_offset]
+        qpi = self.sphere_method(**kwargs)
+        # apply phase offset
+        bg_data = np.ones(qpi.shape) * -self.pha_offset
+        qpi.set_bg_data(bg_data=bg_data, which_data="phase")
+        return qpi
+
+    def get_border_phase(self, idn=0, idr=0):
+        """Return one of nine border fields
+
         Parameters
         ----------
         idn: int
@@ -114,20 +166,9 @@ class SpherePhaseInterpolator(object):
 
         return pha
 
-    def compute_qpi(self):
-        kwargs = self.model_kwargs.copy()
-        kwargs["radius"] = self.radius
-        kwargs["sphere_index"] = self.sphere_index
-        kwargs["center"] = [self.posx_offset, self.posy_offset]
-        qpi = self.sphere_method(**kwargs)
-        # apply phase offset
-        bg_data = np.ones(qpi.shape) * -self.pha_offset
-        qpi.set_bg_data(bg_data=bg_data, which_data="phase")
-        return qpi
-
     def get_phase(self, nintp=None, rintp=None,
                   delta_offset_x=0, delta_offset_y=0):
-        """Interpolate from the border fields to the new coordinates
+        """Interpolate from the border fields to new coordinates
 
         Parameters
         ----------
@@ -142,8 +183,8 @@ class SpherePhaseInterpolator(object):
 
         Returns
         -------
-        field_intp:
-            Interpolated field at the given parameters
+        phase_intp: 2D real-valued np.ndarray
+            Interpolated phase at the given parameters
 
         Notes
         -----
@@ -208,20 +249,3 @@ class SpherePhaseInterpolator(object):
                   self.model, time.time() - ti))
 
         return phas + self.pha_offset
-
-    @property
-    def params(self):
-        par = {"radius": self.radius,
-               "sphere_index": self.sphere_index,
-               "pha_offset": self.pha_offset,
-               "center": [self.posx_offset, self.posy_offset]
-               }
-        return par
-
-    @property
-    def range_n(self):
-        return self.sphere_index - self.dn, self.sphere_index + self.dn
-
-    @property
-    def range_r(self):
-        return self.radius - self.dr, self.radius + self.dr

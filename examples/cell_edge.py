@@ -6,7 +6,7 @@ The hologram of the myeloid leukemia cell (HL60) on the left was
 recorded using digital holographic microscopy (DHM).
 In the quantitative phase image on the right, the detected cell
 contour (white) and the subsequent circle fit (red) as well as the
-resulting average radius and refractive index of the the cell
+resulting average radius and refractive index of the cell
 are shown. The setup used for recording this data is described in
 :cite:`Schuermann2015` which also contains a description of the
 basic steps to determine the position and radius of the cell and

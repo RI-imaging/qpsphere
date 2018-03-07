@@ -1,4 +1,4 @@
-"""Canny edge detection for QPI analysis of spheres"""
+"""Canny edge detection approach for QPI analysis of spheres"""
 import warnings
 
 import lmfit

@@ -22,14 +22,14 @@ DL_REPO = "https://github.com/RI-imaging/QPI-binaries/raw/" \
           + "/BHFIELD"
 
 BHFIELD_MD5 = {"Windows": {
-                    "bhfield-std.exe": "673415a9d49cc4ae0bdcd2da7b78802a",
-                    "bhfield-arp.exe": "75d4b592a000944c947b7133996c9a4c",
-                     },
-               "Linux": {
-                    "bhfield-std.exe": "5141ca8101023b35288f1eeef9ab6ae5",
-                    "bhfield-arp.exe": "843a802dc822251f8a4b4505f2152619",
-                    },
-               }
+    "bhfield-std.exe": "673415a9d49cc4ae0bdcd2da7b78802a",
+    "bhfield-arp.exe": "75d4b592a000944c947b7133996c9a4c",
+},
+    "Linux": {
+    "bhfield-std.exe": "5141ca8101023b35288f1eeef9ab6ae5",
+    "bhfield-arp.exe": "843a802dc822251f8a4b4505f2152619",
+},
+}
 
 
 class BinaryNotAvailableError(BaseException):

@@ -1,5 +1,7 @@
+import os
 import warnings
 
+import matplotlib.pylab as plt
 import numpy as np
 
 import qpimage
@@ -19,7 +21,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
     Parameters
     ----------
     qpi: qpimage.QPImage
-        Experimental data
+        QPI data to fit (e.g. experimental data)
     model: str
         Name of the light-scattering model
         (see :const:`qpsphere.models.available`)
@@ -316,10 +318,17 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
 
 
 def sq_phase_diff(pha_a, pha_b):
-    """ Determined the phase error between phase image a and b.
+    """Compute sum of squares error between two arrays
 
-    - performs unwrapping
-    - corrects for 2pi offset
+    Parameters
+    ----------
+    pha_a, pha_b: 2d real-valued np.ndarrays
+        Phase data to compare
+
+    Returns
+    -------
+    sumsq: float
+        Sum of squares of differences
     """
     err = np.sum((pha_a - pha_b)**2)
     return err
@@ -327,12 +336,34 @@ def sq_phase_diff(pha_a, pha_b):
 
 def plot_phase_errors(phase, mphase, n0, r0, spi_params, ii,
                       model, verbose_out_prefix):
+    """Output phase image error as a PNG and TXT files
 
+    Parameters
+    ----------
+    phase: 2d real-valued np.ndarray
+        phase image
+    mphase: 2d real-valued np.ndarray
+        reference phase image
+    n0: float
+        initial object index
+    r0: float
+        initial object radius [m]
+    spi_params: dict
+        parameter dictionary of :func:`SpherePhaseInterpolator`
+    ii: int
+        iteration index
+    model: str
+        sphere model name
+    verbose_out_prefix: str
+        path for filename prefix to save PNG and TXT files to.
+        Image file names are formatted as:
+        `{verbose_out_prefix}_phasematch_iter_{ii}_{model}.png`.
+        Text file names are formatted as:
+        `{verbose_out_prefix}_trace_{model}.txt`.
+    """
     n = spi_params["sphere_index"]
     r = spi_params["radius"]
 
-    import matplotlib.pylab as plt
-    import os
     phasekwargs = {"vmin": np.min(phase),
                    "vmax": np.max(phase),
                    "interpolation": "nearest"}

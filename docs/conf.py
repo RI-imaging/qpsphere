@@ -32,8 +32,10 @@ sys.path.insert(0, pdir)
 sys.path.append(op.abspath('extensions'))
 
 # Mock all dependencies
-install_requires = ["h5py", "lmfit", "numpy", "scipy", "skimage",
-                    "skimage.restoration"]
+install_requires = ["h5py", "lmfit", "matplotlib", "matplotlib.pylab",
+                    "numpy", "scipy",
+                    "scipy.interpolate", "scipy.special",
+                    "skimage", "skimage.restoration"]
 
 for mod_name in install_requires:
     sys.modules[mod_name] = mock.Mock()
@@ -42,6 +44,7 @@ for mod_name in install_requires:
 # Order class attributes and functions in separate blocks
 autodoc_member_order = 'bysource'
 autodoc_mock_imports = install_requires
+autoclass_content = 'both'
 
 # Display link to GitHub repo instead of doc on rtfd
 rst_prolog = """
