@@ -35,7 +35,8 @@ sys.path.append(op.abspath('extensions'))
 install_requires = ["h5py", "lmfit", "matplotlib", "matplotlib.pylab",
                     "numpy", "scipy",
                     "scipy.interpolate", "scipy.special",
-                    "skimage", "skimage.restoration"]
+                    "skimage", "skimage.restoration",
+                    "qpimage"]
 
 for mod_name in install_requires:
     sys.modules[mod_name] = mock.Mock()
