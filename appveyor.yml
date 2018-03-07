@@ -43,7 +43,8 @@ test_script:
   - codecov
 
 after_test:
-  - python setup.py bdist_wheel
+  - appveyor-retry pip install wheel
+  - appveyor-retry python setup.py bdist_wheel
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
