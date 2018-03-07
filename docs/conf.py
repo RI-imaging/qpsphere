@@ -32,7 +32,7 @@ sys.path.insert(0, pdir)
 sys.path.append(op.abspath('extensions'))
 
 # Mock all dependencies
-install_requires = ["h5py", "lmfit", "matplotlib", "matplotlib.pylab",
+install_requires = ["appdirs", "lmfit", "matplotlib", "matplotlib.pylab",
                     "nrefocus", "numpy", "scipy",
                     "scipy.interpolate", "scipy.special",
                     "skimage", "skimage.restoration",
