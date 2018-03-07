@@ -52,9 +52,9 @@ by fitting a 2D model to the experimental phase image. When setting
 ``method="image"`` in the example above, the following models are available:
 
 - "mie": a full Mie model (very slow)
-- "mie avg": a polarization-averaged Mie model (faster than "mie")
+- "mie-avg": a polarization-averaged Mie model (faster than "mie")
 - "projection": an OPD projection model
 - "rytov": the Rytov approximation
-- "rytov sc": the systematically corrected Rytov approximation
+- "rytov-sc": the systematically corrected Rytov approximation
 
 A comparison of these models can be found in :cite:`Mueller2018`.

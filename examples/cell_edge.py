@@ -36,7 +36,7 @@ qpi = qpimage.QPImage(data=edata["data"],
 # background correction
 qpi.compute_bg(which_data=["amplitude", "phase"],
                fit_offset="fit",
-               fit_profile="ramp",
+               fit_profile="tilt",
                border_px=5,
                )
 

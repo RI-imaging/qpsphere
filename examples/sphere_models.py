@@ -22,10 +22,10 @@ kwargs["pixel_size"] = px_size
 qpi_mie = qpsphere.simulate(model="mie", **kwargs)
 
 # mie averaged
-qpi_mie_avg = qpsphere.simulate(model="mie avg", **kwargs)
+qpi_mie_avg = qpsphere.simulate(model="mie-avg", **kwargs)
 
 # rytov corrected
-qpi_ryt_sc = qpsphere.simulate(model="rytov sc", **kwargs)
+qpi_ryt_sc = qpsphere.simulate(model="rytov-sc", **kwargs)
 
 # rytov
 qpi_ryt = qpsphere.simulate(model="rytov", **kwargs)

@@ -8,10 +8,10 @@ from .mod_rytov_sc import rytov_sc
 
 #: available light-scattering models
 available = {"mie": mie,
-             "mie avg": mie_avg,
+             "mie-avg": mie_avg,
              "projection": projection,
              "rytov": rytov,
-             "rytov sc": rytov_sc,
+             "rytov-sc": rytov_sc,
              }
 
 

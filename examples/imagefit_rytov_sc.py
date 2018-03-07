@@ -18,7 +18,7 @@ qpi = qpsphere.simulate(radius=r,
                         medium_index=med,
                         wavelength=550e-9,
                         grid_size=(256, 256),
-                        model="mie avg",
+                        model="mie-avg",
                         center=c)
 
 # Fitting Mie simulations with the systematically corrected Rytov
@@ -27,7 +27,7 @@ qpi = qpsphere.simulate(radius=r,
 n_fit, r_fit, c_fit, qpi_fit = qpsphere.analyze(qpi=qpi,
                                                 r0=4e-6,
                                                 method="image",
-                                                model="rytov sc",
+                                                model="rytov-sc",
                                                 imagekw={"verbose": 1},
                                                 ret_center=True,
                                                 ret_qpi=True)

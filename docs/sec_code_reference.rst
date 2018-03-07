@@ -6,6 +6,11 @@ Code reference
   :maxdepth: 2
 
 
+analyze (Generic fitting wrapper)
+=================================
+.. autofunction:: qpsphere.analyze
+
+
 edgefit (Contour-based fitting)
 ===============================
 .. automodule:: qpsphere.edgefit
