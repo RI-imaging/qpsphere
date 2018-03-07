@@ -3,6 +3,7 @@ from . import edgefit
 from . import imagefit
 from . import models  # noqa: F401
 from .models import simulate  # noqa: F401
+from . import util  # noqa: F401
 
 
 def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},

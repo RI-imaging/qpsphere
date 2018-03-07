@@ -104,3 +104,6 @@ _version_save.py
 
 *.bib.bak
 
+qpsphere/resources/*.bin
+qpsphere/resources/*.exe
+qpsphere/resources/*.dll
