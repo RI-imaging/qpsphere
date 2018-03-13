@@ -44,7 +44,9 @@ test_script:
 
 after_test:
   - appveyor-retry pip install wheel
-  - appveyor-retry python setup.py bdist_wheel
+  # Force plat-name to windows because wheel does not know that there
+  # are binaries included in the package.
+  - appveyor-retry python setup.py bdist_wheel --plat-name win_amd64
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
