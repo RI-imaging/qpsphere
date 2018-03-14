@@ -1,7 +1,7 @@
+.. _index:
+
 qpsphere documentation
 ======================
-
-.. _index:
 
 Qpsphere is a Python3 library for analyzing spherical objects
 in quantitative phase imaging. This includes the extraction
