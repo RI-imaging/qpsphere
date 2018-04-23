@@ -51,7 +51,7 @@ class SpherePhaseInterpolator(object):
         #: scattering model
         self.model = model
         #: scattering model function
-        self.sphere_method = models.available[model]
+        self.sphere_method = models.model_dict[model]
         #: scattering model keyword arguments
         self.model_kwargs = model_kwargs
         #: current sphere radius [m]
