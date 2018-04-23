@@ -6,13 +6,15 @@ from .mod_proj import projection
 from .mod_rytov import rytov
 from .mod_rytov_sc import rytov_sc
 
+model_dict = {"mie": mie,
+              "mie-avg": mie_avg,
+              "projection": projection,
+              "rytov": rytov,
+              "rytov-sc": rytov_sc,
+              }
+
 #: available light-scattering models
-available = {"mie": mie,
-             "mie-avg": mie_avg,
-             "projection": projection,
-             "rytov": rytov,
-             "rytov-sc": rytov_sc,
-             }
+available = sorted(list(model_dict.keys()))
 
 
 def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
@@ -68,7 +70,7 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     if center is None:
         center = (np.array(grid_size) - 1) / 2
 
-    model = available[model]
+    model = model_dict[model]
     qpi = model(radius=radius,
                 sphere_index=sphere_index,
                 medium_index=medium_index,

@@ -43,6 +43,8 @@ where ``n`` is the average refractive index (RI) and ``r`` is the radius
 of the object in meters estimated by the optical path difference (OPD)
 edge-detection approach.
 
+.. _sec_choose_method_model:
+
 Choosing method and model
 -------------------------
 Although the OPD edge-detection approach is fast, it is inaccurate because it
