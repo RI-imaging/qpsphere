@@ -40,9 +40,9 @@ command line argument must be set.
 ::
 
     # on Windows
-    python setup.py sdist bdist_wheel plat-name win_amd64
+    python setup.py sdist bdist_wheel --plat-name win_amd64
     # on Linux 
-    python setup.py sdist bdist_wheel plat-name manylinux1_x86_64
+    python setup.py sdist bdist_wheel --plat-name manylinux1_x86_64
 
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/qpsphere.svg
