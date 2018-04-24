@@ -336,7 +336,7 @@ def sq_phase_diff(pha_a, pha_b):
 
 def plot_phase_errors(phase, mphase, n0, r0, spi_params, ii,
                       model, verbose_out_prefix):
-    """Output phase image error as a PNG and TXT files
+    """Output phase image error as PNG and TXT files
 
     Parameters
     ----------
