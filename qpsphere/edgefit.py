@@ -14,6 +14,10 @@ class EdgeDetectionWarning(Warning):
     pass
 
 
+class RadiusExceedsImageSizeError(BaseException):
+    pass
+
+
 def analyze(qpi, r0, edgekw={}, ret_center=False, ret_edge=False):
     """Determine refractive index and radius using Canny edge detection
 
@@ -276,7 +280,7 @@ def contour_canny(image, radius, mult_coarse=.40, mult_fine=.1,
 
     if radius > image.shape[0] / 2:
         msg = "`radius` in pixels exceeds image size: {}".format(radius)
-        raise ValueError(msg)
+        raise RadiusExceedsImageSizeError(msg)
     # 1. Perform a coarse Canny edge detection. If the edge found is empty,
     # the coarse filter size is reduced by a factor of 2.
     for ii in range(maxiter):

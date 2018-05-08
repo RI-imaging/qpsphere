@@ -1,3 +1,6 @@
+0.1.6
+ - feat: integer grid_size allowed for square-shaped simulation
+ - ref: introduce RadiusExceedsImageSizeError in contour detection
 0.1.5
  - BREAKING CHANGE: `models.available` is now a list, use
    `models.model_dict` instead.
