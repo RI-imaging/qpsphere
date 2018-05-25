@@ -7,7 +7,7 @@ import qpimage
 
 
 def interpolate_grid(cin, cout, data, fillval=0):
-    """ Return the 2D field averaged radially w.r.t. the center """
+    """Return the 2D field averaged radially w.r.t. the center"""
     if np.iscomplexobj(data):
         phase = interpolate_grid(
             cin, cout, unwrap.unwrap_phase(np.angle(data)), fillval=0)
