@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from os.path import dirname, realpath, exists
 from distutils.command.build import build
 from setuptools import setup, find_packages
@@ -43,10 +41,10 @@ setup(
     install_requires=["appdirs",
                       "lmfit",
                       "matplotlib",
-                      "nrefocus >= 0.1.5",
-                      "numpy >= 1.9.0",
-                      "scikit-image >= 0.11.0",
-                      "scipy >= 0.18.0",
+                      "nrefocus>=0.1.5",
+                      "numpy>=1.9.0",
+                      "scikit-image>=0.11.0",
+                      "scipy>=0.18.0",
                       "qpimage",
                       ],
     setup_requires=['pytest-runner'],
