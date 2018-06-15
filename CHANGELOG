@@ -1,4 +1,5 @@
-0.1.6
+0.2.0
+ - drop support for Python 3.5
  - feat: integer grid_size allowed for square-shaped simulation
  - ref: introduce RadiusExceedsImageSizeError in contour detection
  - code cleanup

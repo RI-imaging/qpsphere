@@ -49,7 +49,7 @@ setup(
                       ],
     setup_requires=['pytest-runner'],
     tests_require=["pytest"],
-    python_requires='>=3.5, <4',
+    python_requires='>=3.6, <4',
     keywords=["digital holographic microscopy",
               "optics",
               "quantitative phase imaging",
