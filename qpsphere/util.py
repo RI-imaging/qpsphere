@@ -43,7 +43,7 @@ def download_binaries(package_dir=False):
         for pp in paths:
             target = pdir / pp.name
             if not target.exists():
-                shutil.copy(str(pp), str(target))
+                shutil.copy(pp, target)
             outpaths.append(target)
     else:
         outpaths = paths

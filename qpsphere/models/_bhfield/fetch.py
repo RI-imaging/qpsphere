@@ -1,7 +1,6 @@
 """Fetch BHFIELD binaries from GitHub"""
 import contextlib
 import hashlib
-import os
 import pathlib
 from pkg_resources import resource_filename
 import platform
@@ -48,7 +47,7 @@ def download_binary(url, dest, md5, retries=3):
     print("qpimage: Downloading '{}', please wait.".format(dest.name))
     for rr in range(retries):
         if dest.exists():
-            os.remove(str(dest))
+            dest.unlink()
         try:
             urlretrieve(url, dest)
         except BaseException:

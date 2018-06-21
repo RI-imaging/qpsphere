@@ -42,7 +42,7 @@ setup(
                       "lmfit",
                       "matplotlib",
                       "nrefocus>=0.1.5",
-                      "numpy>=1.9.0",
+                      "numpy>=1.12.0",
                       "scikit-image>=0.11.0",
                       "scipy>=0.18.0",
                       "qpimage",

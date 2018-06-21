@@ -142,7 +142,7 @@ def circle_fit(edge, ret_dev=False):
     -------
     center: tuple of (float, float)
         Coordinates of the circle center
-    radius: fload
+    radius: float
         Radius of the circle [px]
     rdev:
         Only returned if `ret_dev` is True

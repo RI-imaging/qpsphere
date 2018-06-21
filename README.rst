@@ -10,7 +10,7 @@ qpsphere
 Documentation
 -------------
 
-The documentation, including the reference and examples, is available on
+The documentation, including the reference and examples, is available at
 `qpsphere.readthedocs.io <https://qpsphere.readthedocs.io/en/stable/>`__.
 
 

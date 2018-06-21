@@ -103,7 +103,7 @@ def load_field(wdir, shape_grid):
     check_simulation(wdir)
     field_file = wdir / "V_0Ereim.dat"
 
-    a = np.loadtxt(str(field_file))
+    a = np.loadtxt(field_file)
 
     assert shape_grid[0] == int(
         shape_grid[0]), "resulting x-size is not an integer"
@@ -278,7 +278,7 @@ def run_simulation(wdir, arp=True, **kwargs):
           + "{case} {Kreibig:f} {n_med:f} {n_core:f} {k_core:f} " \
           + "{n_coat:f} {k_coat:f}"
     old_dir = pathlib.Path.cwd()
-    os.chdir(str(wdir))
+    os.chdir(wdir)
 
     kwargs["pathbhfield"] = get_binary(arp=arp)
 
@@ -291,7 +291,7 @@ def run_simulation(wdir, arp=True, **kwargs):
     sp.check_output(cmd.format(**kwargs), shell=True)
 
     # Go back to orgignal directory before checking (checking might fail)
-    os.chdir(str(old_dir))
+    os.chdir(old_dir)
 
     # Check bhdebug.txt to make sure that you specify enough digits to
     # overcome roundoff errors.
