@@ -27,3 +27,17 @@ script:
        flake8 examples;
        flake8 tests;
   fi;
+after_success:
+# force bdist_wheel to use the manylinux platform tag
+# (there is no compiled python code, only the precompiled binaries)
+- echo "[bdist_wheel]" >> setup.cfg
+- echo "plat-name = manylinux1_x86_64" >> setup.cfg
+deploy:
+  provider: pypi
+  user: "release_bot"
+  password:
+    secure: "AioVvvMRDxoPoIZ6D/lvqNFVrMnkZ4eFR2UKsocgtl5dfWtXvS8MLEYLuQQlY76rP+rC07usYzyOzAiJOXvEiPO/mPUNL7ZzwgqfBC7HvsboA+njLdcaH/PmFBnrVyuNSKQQZcuKjc2gI9Uky0onOzwFZfxtLvmd3x508RiN1kevo8UwlAs/aBEzd9a1vB99vmqSavyS9+bHrIVo2tozB6R0N/AQ23QyBR6k4kkr4+Sie/35jUUFSinHWwzsM2Xy/wdP6zDxBSf1e/HwEqgsXHcky8z9udkaiB1gZ3NeqJYdTaK2FCjfgkFrRZxBAZkVKB6dcFcdgK9TZxdIoGzsS3j8naZvfWZZ4VLT7HJgwG6tzET9Id7yT5UbuXvEcorPwmn4OZupmOpNPBeayLs9O/yB6cilWyWO+mgqujG1fowefYKr9awdj5QU7JK5bJoFQN4K18w/h9TBiuI5ngpTCmM7GDGY/xqenJ1JQtQAxi+WZk8VL0J0/THGR1nwCNWYh6OCysbD6hgzH1j1sv7XkGFOzyxjtKQrPXGkg9fZbYRIAwPppZjok036wfuBHcPZHN/EqUSPGUI93NgGdLvW8LJVV53OajVfrvML2vWsNBh7SAyuoiGysc3WFPvrAqKSRvgb+dMvmQuR2NlXxY83r3Ghqff4OXKHpfR5qPeKQdk="
+  distributions: "bdist_wheel"
+  on:
+    tags: true
+
