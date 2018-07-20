@@ -44,14 +44,14 @@ class BinaryMD5SumCheckError(BaseException):
 
 
 def download_binary(url, dest, md5, retries=3):
-    print("qpimage: Downloading '{}', please wait.".format(dest.name))
+    print("qpsphere: Downloading '{}', please wait.".format(dest.name))
     for rr in range(retries):
         if dest.exists():
             dest.unlink()
         try:
             urlretrieve(url, dest)
         except BaseException:
-            print("qpimage: Download of {} failed ({}/{})".format(url,
+            print("qpsphere: Download of {} failed ({}/{})".format(url,
                                                                   rr + 1,
                                                                   retries))
             continue

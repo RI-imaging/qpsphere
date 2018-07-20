@@ -10,11 +10,9 @@ environment:
     secure: rQ9pez7yeNKlSGNyUQou0l8vR9YU1V9gR0VIcZSZcrKpE10eoquFUc6JKTiYS4fq
   PYPI_USR: release_bot
   PYTHON: "C:\\Python36-x64"
-  PYTHON_VERSION: "3.6.x"
-  PYTHON_ARCH: "64"
 
 init:
-  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+  - "ECHO %PYTHON%
 
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
@@ -43,9 +41,10 @@ test_script:
 
 after_test:
   - appveyor-retry pip install twine wheel
+  - appveyor-retry python setup.py sdist
   # Force plat-name to windows because wheel does not know that there
   # are binaries included in the package.
-  - appveyor-retry python setup.py sdist bdist_wheel --plat-name win_amd64
+  - appveyor-retry python setup.py bdist_wheel --plat-name win_amd64
   # setup PyPI credentials
   - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
   - cmd: "echo username: %PYPI_USR% >> %USERPROFILE%\\.pypirc"
