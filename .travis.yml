@@ -4,6 +4,9 @@ python:
 notifications:
   email: false
 env:
+  global:
+  - PYPI_USR=release_bot
+  - secure: "fJz1wbn+ck0bWntGyijlNbgiBXR45YUYIIgN7ToqLJRewETVWzrdjSax+Toi1YpduITShgsd3qyUhQdFxZPeOpZXtG9V91YVODloYQVbVUcSArz94MKzHwjrkV5yxXeEpwaU1OPW4ufQM280ZJWSLOy3sUXnTwOGE2tRdP1cqIV//KM8RoVoo5L4OXudDR/yH6Fq5Ksdi5z0TvBJiNduQ57dUr2RVp2FwDIxoUwExgEYbFCZikG0sav95Zhm4E/WCvIkVycrT2hJhURwsAe1mf8KzgNI2wz4Rt4ROd2kj/+UvDMRa1PnXDPrc+uFaDf857DmBmJHj+CMv2lhvoc+kUge9uEoPp5J4sul/GQbbPs4EyVLLj7WJ1Jr5yGcMU/nHSa5T6ts5Abo3IXPmyP3HmTsd8Zl2Z4eVUe9H2E3TKp+7NgLv7WxoNPfCJuQP/hZt6pmKBeGJOLV2z69gEGigE9fB8YHLrjarS4Po0HzQ/j1nwRo74hHEevMk5Y8Xs9pNB84jG5tiqCKSs4Ajt/l6As2Q+z2yYCn614D0PJj+iqpfxjconlIk2dLbvb7+MPlojCmPzyhQfKZp7Q72eMEX8Eti51VK47YxbDzwqlVq1ZDj6GSpgMU57MgFdQ2TW0apolr5GZ+Nsgm8gM3t/tv+WlVqn0o6v2hJfy58wthQt4="
   matrix:
   - TEST="PYTEST"
   - TEST="FLAKE8"
@@ -15,9 +18,9 @@ install:
 # coverage packages
 - travis_retry pip install flake8
 - travis_retry pip install codecov coverage
+- travis_retry pip install twine
 - pip freeze
 script:
-- set -ev
 - if [ "${TEST}" == "PYTEST" ]; then
        coverage run --source=qpsphere ./setup.py test;
        coverage report -m;
@@ -28,16 +31,13 @@ script:
        flake8 tests;
   fi;
 after_success:
-# force bdist_wheel to use the manylinux platform tag
-# (there is no compiled python code, only the precompiled binaries)
-- echo "[bdist_wheel]" >> setup.cfg
-- echo "plat-name = manylinux1_x86_64" >> setup.cfg
-deploy:
-  provider: pypi
-  user: "release_bot"
-  password:
-    secure: "AioVvvMRDxoPoIZ6D/lvqNFVrMnkZ4eFR2UKsocgtl5dfWtXvS8MLEYLuQQlY76rP+rC07usYzyOzAiJOXvEiPO/mPUNL7ZzwgqfBC7HvsboA+njLdcaH/PmFBnrVyuNSKQQZcuKjc2gI9Uky0onOzwFZfxtLvmd3x508RiN1kevo8UwlAs/aBEzd9a1vB99vmqSavyS9+bHrIVo2tozB6R0N/AQ23QyBR6k4kkr4+Sie/35jUUFSinHWwzsM2Xy/wdP6zDxBSf1e/HwEqgsXHcky8z9udkaiB1gZ3NeqJYdTaK2FCjfgkFrRZxBAZkVKB6dcFcdgK9TZxdIoGzsS3j8naZvfWZZ4VLT7HJgwG6tzET9Id7yT5UbuXvEcorPwmn4OZupmOpNPBeayLs9O/yB6cilWyWO+mgqujG1fowefYKr9awdj5QU7JK5bJoFQN4K18w/h9TBiuI5ngpTCmM7GDGY/xqenJ1JQtQAxi+WZk8VL0J0/THGR1nwCNWYh6OCysbD6hgzH1j1sv7XkGFOzyxjtKQrPXGkg9fZbYRIAwPppZjok036wfuBHcPZHN/EqUSPGUI93NgGdLvW8LJVV53OajVfrvML2vWsNBh7SAyuoiGysc3WFPvrAqKSRvgb+dMvmQuR2NlXxY83r3Ghqff4OXKHpfR5qPeKQdk="
-  distributions: "bdist_wheel"
-  on:
-    tags: true
+# do not use the travis deploy service, because we need to give the
+# wheel a specific platform name.
+- echo "[pypi]" > $HOME/.pypirc
+- echo "username: $PYPI_USR" >> $HOME/.pypirc
+- echo "username: $PYPI_PWD" >> $HOME/.pypirc
+- if [ "${TRAVIS_BRANCH}" == "${TRAVIS_TAG}" ] && [ "${TEST}" == "PYTEST" ]; then
+       python setup.py bdist_wheel --plat-name manylinux1_x86_64;
+       twine upload ./dist/*.whl;
+  fi;
 
