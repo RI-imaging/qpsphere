@@ -52,8 +52,8 @@ def download_binary(url, dest, md5, retries=3):
             urlretrieve(url, dest)
         except BaseException:
             print("qpsphere: Download of {} failed ({}/{})".format(url,
-                                                                  rr + 1,
-                                                                  retries))
+                                                                   rr + 1,
+                                                                   retries))
             continue
         else:
             break
