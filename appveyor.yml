@@ -9,7 +9,7 @@ environment:
   PYPI_PWD:
     secure: rQ9pez7yeNKlSGNyUQou0l8vR9YU1V9gR0VIcZSZcrKpE10eoquFUc6JKTiYS4fq
   PYPI_USR: release_bot
-  PYTHON: "C:\\Python36"
+  PYTHON: "C:\\Python36-x64"
   PYTHON_VERSION: "3.6.x"
   PYTHON_ARCH: "64"
 
