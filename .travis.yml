@@ -35,7 +35,9 @@ after_success:
 # wheel a specific platform name.
 - echo -e "[pypi]\n username:${PYPI_USR}\n password:${PYPI_PWD}" > ~/.pypirc
 - if [ "${TRAVIS_BRANCH}" == "${TRAVIS_TAG}" ] && [ "${TEST}" == "PYTEST" ]; then
+       python setup.py sdist;
        python setup.py bdist_wheel --plat-name manylinux1_x86_64;
        twine upload ./dist/*.whl;
+       twine upload ./dist/*.tar.gz;
   fi;
 
