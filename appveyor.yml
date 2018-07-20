@@ -6,6 +6,10 @@ notifications:
     on_build_failure: false
     on_build_status_changed: false
 environment:
+  PYPI_PWD:
+    secure: rQ9pez7yeNKlSGNyUQou0l8vR9YU1V9gR0VIcZSZcrKpE10eoquFUc6JKTiYS4fq
+  PYPI_USR:
+    release_bot
   matrix:
     - PYTHON: "C:\\Python36"
       PYTHON_VERSION: "3.6.x"
@@ -46,8 +50,14 @@ after_test:
   - appveyor-retry pip install wheel
   # Force plat-name to windows because wheel does not know that there
   # are binaries included in the package.
+  - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
+  - cmd: "echo username: %PYPI_USR% >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo password: %PYPI_PWD% >> %USERPROFILE%\\.pypirc"
   - appveyor-retry python setup.py bdist_wheel --plat-name win_amd64
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
   - path: dist\*
+
+on_success:
+  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] twine upload dist\\*.whl"
