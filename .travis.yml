@@ -33,9 +33,7 @@ script:
 after_success:
 # do not use the travis deploy service, because we need to give the
 # wheel a specific platform name.
-- echo "[pypi]" > $HOME/.pypirc
-- echo "username: $PYPI_USR" >> $HOME/.pypirc
-- echo "password: $PYPI_PWD" >> $HOME/.pypirc
+- echo -e "[pypi]\n username:${PYPI_USR}\n password:${PYPI_PWD}" > ~/.pypirc
 - if [ "${TRAVIS_BRANCH}" == "${TRAVIS_TAG}" ] && [ "${TEST}" == "PYTEST" ]; then
        python setup.py bdist_wheel --plat-name manylinux1_x86_64;
        twine upload ./dist/*.whl;

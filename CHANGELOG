@@ -1,4 +1,4 @@
-0.2.4
+0.2.5
  - maintenance release to test automated deploy to PyPI
 0.2.0
  - drop support for Python 3.5
