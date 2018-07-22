@@ -7,8 +7,8 @@ notifications:
     on_build_status_changed: false
 environment:
   PYPI_PWD:
-    secure: rQ9pez7yeNKlSGNyUQou0l8vR9YU1V9gR0VIcZSZcrKpE10eoquFUc6JKTiYS4fq
-  PYPI_USR: release_bot
+    secure: E17KPpTuWwfeGgDMWb8SvBq6H+WsArRY2JCpJZgks3C/5MGHEN6tnCSAZD1lJKT7
+  PYPI_USR: ci_qpi
   PYTHON: "C:\\Python36-x64"
 
 init:
