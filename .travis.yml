@@ -4,9 +4,6 @@ python:
 notifications:
   email: false
 env:
-  global:
-  - PYPI_USR=release_bot
-  - secure: "fJz1wbn+ck0bWntGyijlNbgiBXR45YUYIIgN7ToqLJRewETVWzrdjSax+Toi1YpduITShgsd3qyUhQdFxZPeOpZXtG9V91YVODloYQVbVUcSArz94MKzHwjrkV5yxXeEpwaU1OPW4ufQM280ZJWSLOy3sUXnTwOGE2tRdP1cqIV//KM8RoVoo5L4OXudDR/yH6Fq5Ksdi5z0TvBJiNduQ57dUr2RVp2FwDIxoUwExgEYbFCZikG0sav95Zhm4E/WCvIkVycrT2hJhURwsAe1mf8KzgNI2wz4Rt4ROd2kj/+UvDMRa1PnXDPrc+uFaDf857DmBmJHj+CMv2lhvoc+kUge9uEoPp5J4sul/GQbbPs4EyVLLj7WJ1Jr5yGcMU/nHSa5T6ts5Abo3IXPmyP3HmTsd8Zl2Z4eVUe9H2E3TKp+7NgLv7WxoNPfCJuQP/hZt6pmKBeGJOLV2z69gEGigE9fB8YHLrjarS4Po0HzQ/j1nwRo74hHEevMk5Y8Xs9pNB84jG5tiqCKSs4Ajt/l6As2Q+z2yYCn614D0PJj+iqpfxjconlIk2dLbvb7+MPlojCmPzyhQfKZp7Q72eMEX8Eti51VK47YxbDzwqlVq1ZDj6GSpgMU57MgFdQ2TW0apolr5GZ+Nsgm8gM3t/tv+WlVqn0o6v2hJfy58wthQt4="
   matrix:
   - TEST="PYTEST"
   - TEST="FLAKE8"
@@ -31,13 +28,22 @@ script:
        flake8 tests;
   fi;
 after_success:
-# do not use the travis deploy service, because we need to give the
+# do not use the travis deploy "bdist_wheel", because we need to give the
 # wheel a specific platform name.
 - echo -e "[pypi]\n username:${PYPI_USR}\n password:${PYPI_PWD}" > ~/.pypirc
 - if [ "${TRAVIS_BRANCH}" == "${TRAVIS_TAG}" ] && [ "${TEST}" == "PYTEST" ]; then
-       python setup.py sdist;
        python setup.py bdist_wheel --plat-name manylinux1_x86_64;
-       twine upload ./dist/*.whl;
-       twine upload ./dist/*.tar.gz;
   fi;
+deploy:
+  provider: pypi
+  user: "ci_qpi"
+  password:
+    secure: "aa4A0yok+SMHZiAYEnn3cHhcKS6qKb/jumlArPPXB3I40xVkD0E7brGtCfGiawheMXFxo9Ro9sltnMOq2zbUyls8mqxdFRWPuQsT9wp9JZMJVY9zv8PBGAZqT+cYef/AOrTMr4wD4IqsV8E1myQeanrjxsU8ipuPRQfARj+HnHAjpGqa15/WDsdEmXK607Os8iTOZkke51g1yDmnvZfx62i6l6Wa1mGUxdoOEFHX3ZjNrLad6cGtwrEqgIkdx+m8IYilfarLkcmACeV5V0JYxWrfM1JDpL+KHfSPAsCQcpgih3W39s0xpzvW5YRxXKArm5YJunydkzO0uCSzaiBSZpAlB+kyCPKl3BrN2KXJ14uyGVg5wcG0fizBr9Fvdwa5BYlH9tl8a4kc/yi4wr6SAhB4mB2ih2Qs6uH7dBVTecub+lA5fTte6xwJzcXu5KC6SGeS28/jwqEMhPRA/JNAFkK3Qs3k5wX107aCov8CJfnFqzamTE2/m6iBP+oN9mi7Rg2kT6Q4jgHqSBrKG73m4gshv64oHd9GE27qoOSbBAElQ0IGMJXR9PNzHqgZ6e8t+BP+FNMQrsrWPswWqY1IG6qDdhERI1ARVhLPSnQ9cHRFLah3QnYJwOU0HvTATlNkwujv8N+eIYDKXSCbqJjEULrjne9HeRPwSqV0U7Y5njY="
+  on:
+    tags: true
+    # limit to one version to avoid upload errors
+    python: 3.6
+    condition: "$TEST = PYTEST"
+  distributions: "sdist"
+  skip_cleanup: true
 
