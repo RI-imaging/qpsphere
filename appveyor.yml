@@ -6,9 +6,9 @@ notifications:
     on_build_failure: false
     on_build_status_changed: false
 environment:
+  PYPI_USR: ci_qpi
   PYPI_PWD:
     secure: E17KPpTuWwfeGgDMWb8SvBq6H+WsArRY2JCpJZgks3C/5MGHEN6tnCSAZD1lJKT7
-  PYPI_USR: ci_qpi
   PYTHON: "C:\\Python36-x64"
 
 init:
@@ -54,4 +54,5 @@ artifacts:
   - path: dist\*
 
 on_success:
-  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] twine upload dist\\*.whl"
+  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] twine upload --skip-existing dist\\*.whl"
+  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] twine upload --skip-existing dist\\*.tag.gz"
