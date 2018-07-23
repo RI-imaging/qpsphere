@@ -1,10 +1,10 @@
 import nrefocus
 import numpy as np
 import scipy.interpolate as spinterp
-from skimage.restoration import unwrap
 
 import qpimage
 
+from .mod_mie import field2ap_corr
 from ._bhfield import simulate_sphere
 
 
@@ -132,17 +132,10 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                                      nm=medium_index,
                                      res=wavelength / pixel_size * interpolate)
 
+    # Phase (2PI offset corrected) and amplitude
+    ampli, phase = field2ap_corr(refoc_field2d)
+
     # Perform new interpolation on requested grid
-    # We might introduce an offset here:
-    phase = unwrap.unwrap_phase(np.angle(refoc_field2d), seed=47)
-
-    # detect and remove multiple-2PI phase offset
-    pha_offset = np.median(phase[:3])
-    num_2pi = np.round(pha_offset / (2 * np.pi))
-    if num_2pi:
-        phase -= num_2pi * 2 * np.pi
-
-    ampli = np.abs(refoc_field2d)
     intpp = spinterp.RectBivariateSpline(x, y, phase, kx=1, ky=1)
     intpa = spinterp.RectBivariateSpline(x, y, ampli, kx=1, ky=1)
 

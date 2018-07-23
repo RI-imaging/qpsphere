@@ -1,8 +1,39 @@
 import nrefocus
 import numpy as np
 import qpimage
+from skimage.restoration import unwrap
 
 from ._bhfield import simulate_sphere
+
+
+def field2ap_corr(field):
+    """Determine amplitude and offset-corrected phase from a field
+
+    The phase jumps sometimes appear after phase unwrapping.
+
+    Parameters
+    ----------
+    field: 2d complex np.ndarray
+        Complex input field
+
+    Returns
+    -------
+    amp: 2d real np.ndarray
+        Amplitude data
+    pha: 2d real np.ndarray
+        Phase data, corrected for 2PI offsets
+    """
+    phase = unwrap.unwrap_phase(np.angle(field), seed=47)
+    samples = []
+    samples.append(phase[:, :3].flatten())
+    samples.append(phase[:, -3:].flatten())
+    samples.append(phase[:3, 3:-3].flatten())
+    samples.append(phase[-3:, 3:-3].flatten())
+    pha_offset = np.median(np.hstack(samples))
+    num_2pi = np.round(pha_offset / (2 * np.pi))
+    phase -= num_2pi * 2 * np.pi
+    ampli = np.abs(field)
+    return ampli, phase
 
 
 def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
@@ -70,6 +101,9 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                              nm=medium_index,
                              res=wavelength / pixel_size)
 
+    # Phase (2PI offset corrected) and amplitude
+    amp, pha = field2ap_corr(refoc)
+
     meta_data = {"pixel size": pixel_size,
                  "wavelength": wavelength,
                  "medium index": medium_index,
@@ -78,6 +112,7 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                  "sim index": sphere_index,
                  }
 
-    qpi = qpimage.QPImage(data=refoc, which_data="field",
+    qpi = qpimage.QPImage(data=(pha, amp),
+                          which_data="phase,amplitude",
                           meta_data=meta_data)
     return qpi
