@@ -3,7 +3,7 @@ import numpy as np
 import qpsphere
 
 
-def test_basic():
+def test_wrapper():
     r = 5e-6
     n = 1.339
     c = (11, 11)

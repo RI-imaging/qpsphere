@@ -112,6 +112,36 @@ def test_circle_fit():
     assert np.allclose(dev, 0, rtol=0, atol=3e-8)
 
 
+def test_wrapper():
+    r = 5e-6
+    n = 1.339
+    c = (11, 11)
+    s = 25
+    qpi = qpsphere.simulate(radius=r,
+                            sphere_index=n,
+                            medium_index=1.333,
+                            wavelength=550e-9,
+                            grid_size=(s, s),
+                            model="projection",
+                            pixel_size=3 * r / s,
+                            center=c)
+    # perform edge detection analysis
+    n_fit, r_fit, c_fit, c_off, qpi_fit = qpsphere.analyze(qpi=qpi,
+                                                           r0=r * .8,
+                                                           method="edge",
+                                                           model="projection",
+                                                           ret_center=True,
+                                                           ret_qpi=True,
+                                                           ret_pha_offset=True
+                                                           )
+    assert c_off == 0
+    assert np.abs(n - n_fit) < 0.00159
+    assert np.abs(r - r_fit) < 5.023e-7
+    assert np.abs(c[0] - c_fit[0]) < 0.261
+    assert np.abs(c[1] - c_fit[1]) < 0.261
+    assert np.allclose(qpi.pha, qpi_fit.pha, atol=0.344, rtol=0)
+
+
 if __name__ == "__main__":
     # Run all tests
     loc = locals()
