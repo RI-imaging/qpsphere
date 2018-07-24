@@ -5,6 +5,7 @@
    the creation of many PNG files) has been removed in favor
    of a single hdf5 file that allows to retrace the fitting
    procedure.
+ - fix: `max_iter` was actually `max_iter + 1`
  - tests: improve coverage
  - docs: minor improvements
 0.2.7

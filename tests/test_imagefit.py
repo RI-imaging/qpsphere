@@ -49,6 +49,66 @@ def test_alg_export_phase():
     shutil.rmtree(tdir, ignore_errors=True)
 
 
+def test_alg_interim():
+    r = 5e-6
+    n = 1.339
+    c = (11, 11)
+    s = 25
+    qpi = qpsphere.simulate(radius=r,
+                            sphere_index=n,
+                            medium_index=1.333,
+                            wavelength=550e-9,
+                            grid_size=(s, s),
+                            model="projection",
+                            pixel_size=3 * r / s,
+                            center=c)
+
+    # fit simulation with projection model
+    _, _, interim = qpsphere.analyze(qpi=qpi,
+                                     r0=r * .8,
+                                     method="image",
+                                     model="projection",
+                                     imagekw={
+                                         "ret_interim": True},
+                                     )
+    assert interim
+    assert interim[0][0] == 0
+    assert interim[1][0] == 1
+    assert "radius" in interim[0][1]
+    assert "sphere_index" in interim[0][1]
+    assert "pha_offset" in interim[0][1]
+    assert "center" in interim[0][1]
+
+
+def test_alg_maxiter():
+    r = 5e-6
+    n = 1.339
+    c = (11, 11)
+    s = 25
+    qpi = qpsphere.simulate(radius=r,
+                            sphere_index=n,
+                            medium_index=1.333,
+                            wavelength=550e-9,
+                            grid_size=(s, s),
+                            model="projection",
+                            pixel_size=3 * r / s,
+                            center=c)
+
+    # fit simulation with projection model
+    _, _, num_iter = qpsphere.analyze(qpi=qpi,
+                                      r0=r * .8,
+                                      method="image",
+                                      model="projection",
+                                      imagekw={
+                                          "min_iter": 1,
+                                          "max_iter": 2,
+                                          "ret_num_iter": True,
+                                          "verbose": 1},
+                                      )
+    assert abs(num_iter) == 2, "max_iter is 2"
+    assert np.sign(num_iter) == -1, "fitting aborted returns negative values"
+
+
 def test_wrapper():
     r = 5e-6
     n = 1.339
@@ -64,17 +124,19 @@ def test_wrapper():
                             center=c)
 
     # fit simulation with projection model
-    n_fit, r_fit, c_fit, qpi_fit = qpsphere.analyze(qpi=qpi,
-                                                    r0=r * .8,
-                                                    method="image",
-                                                    model="projection",
-                                                    ret_center=True,
-                                                    ret_qpi=True,
-                                                    )
+    n_fit, r_fit, c_fit, p_off, qpi_fit = qpsphere.analyze(qpi=qpi,
+                                                           r0=r * .8,
+                                                           method="image",
+                                                           model="projection",
+                                                           ret_center=True,
+                                                           ret_qpi=True,
+                                                           ret_pha_offset=True,
+                                                           )
     assert np.abs(n - n_fit) < 3.7e-6
     assert np.abs(r - r_fit) < 1.3e-9
     assert np.abs(c[0] - c_fit[0]) < 2.7e-3
     assert np.abs(c[1] - c_fit[1]) < 2.7e-3
+    assert p_off == 0
     assert np.allclose(qpi.pha, qpi_fit.pha, atol=0.0031, rtol=0)
 
 

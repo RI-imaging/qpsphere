@@ -225,7 +225,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
             print("Iteration {}: n={:.5e}, r={:.5e}m".format(ii,
                                                              spi.sphere_index,
                                                              spi.radius))
-        elif verbose > 1:
+        elif verbose >= 2:
             print("Iteration {}: {}".format(ii, spi.params))
 
         interim.append([ii, spi.params])
@@ -234,23 +234,23 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         if (idn > range_ipol / 2 - range_ipol / 10 and
                 idn < range_ipol / 2 + range_ipol / 10):
             spi.dn /= 2
-            if verbose > 1:
+            if verbose >= 2:
                 print("Halved search interval: spi.dn={:.8f}".format(spi.dn))
         if (idr > range_ipol / 2 - range_ipol / 10 and
                 idr < range_ipol / 2 + range_ipol / 10):
             spi.dr /= 2
-            if verbose > 1:
+            if verbose >= 2:
                 print("Halved search interval: spi.dr={:.8f}".format(spi.dr))
         if deltax**2 + deltay**2 < dc**2:
             dc /= 2
-            if verbose > 1:
+            if verbose >= 2:
                 print("Halved search interval: dc={:.8f}".format(dc))
 
         if ii < min_iter:
             if verbose:
                 print("Keep iterating because `min_iter`={}.".format(min_iter))
             continue
-        elif ii > max_iter:
+        elif ii >= max_iter:
             ii *= -1
             if verbose:
                 print("Stopping iteration: reached `max_iter`={}".format(
@@ -289,7 +289,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
             message = "fail, same parameters encountered twice"
             break
 
-        if verbose > 1:
+        if verbose >= 2:
             infostring = ""
             if not abs(spi.sphere_index - n_old) < stop_dn:
                 infostring += " delta_n = {} > {}".format(
