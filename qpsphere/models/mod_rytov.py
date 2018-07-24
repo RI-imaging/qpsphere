@@ -23,7 +23,7 @@ def interpolate_grid(cin, cout, data, fillval=0):
 
 
 def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
-          wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
+          wavelength=550e-9, pixel_size=.5e-6, grid_size=(80, 80),
           center=(39.5, 39.5), radius_sampling=42):
     """Field behind a dielectric sphere in the Rytov approximation
 
