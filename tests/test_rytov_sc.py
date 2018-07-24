@@ -1,6 +1,6 @@
 import numpy as np
 
-from qpsphere.models import mod_rytov_sc
+from qpsphere.models import mod_rytov_sc, mod_rytov
 
 
 def test_parameter_inversion():
@@ -20,6 +20,30 @@ def test_parameter_inversion():
 
     assert np.allclose(r, r2, atol=1e-15, rtol=0)
     assert np.allclose(n, n2, atol=1e-15, rtol=0)
+
+
+def test_basic():
+    kwargs = dict(grid_size=(20, 20),
+                  center=(9.5, 9.5),
+                  radius=5e-6,
+                  sphere_index=1.339,
+                  medium_index=1.333,
+                  wavelength=550e-9,
+                  pixel_size=1e-6)
+
+    kwargs2 = kwargs.copy()
+    kwargs2["radius"], kwargs2["sphere_index"] = \
+        mod_rytov_sc.correct_rytov_sc_input(
+            radius_sc=kwargs["radius"],
+            sphere_index_sc=kwargs["sphere_index"],
+            medium_index=kwargs["medium_index"],
+            radius_sampling=42)
+
+    qpi = mod_rytov.rytov(**kwargs2)
+    qpi_sc = mod_rytov_sc.rytov_sc(**kwargs)
+
+    assert qpi_sc["sim model"] == "rytov-sc"
+    assert np.all(qpi.pha == qpi_sc.pha)
 
 
 if __name__ == "__main__":

@@ -110,6 +110,7 @@ def test_basic():
     qpi = rytov(grid_size=(20, 20),
                 center=(9.5, 9.5),
                 radius=5e-6,
+                sphere_index=1.339,
                 wavelength=550e-9,
                 pixel_size=1e-6)
 
@@ -121,6 +122,7 @@ def test_odd():
     qpi = rytov(grid_size=(21, 21),
                 center=(9.5, 9.5),
                 radius=5e-6,
+                sphere_index=1.339,
                 wavelength=550e-9,
                 pixel_size=1e-6)
 
