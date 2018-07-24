@@ -127,32 +127,35 @@ def simulate_sphere(radius_sphere_um=2.5,
                     wavelength_nm=500,
                     offset_x_um=0,
                     offset_y_um=0,
-                    arp=True):
+                    arp=True,
+                    working_directory=None):
     """
     Parameters
     ----------
     radius_sphere_um : float
-        radius of sphere in um
+        Radius of sphere in um
     size_simulation_um : list of floats
         Size of simulation volume in lateral dimension in um.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
     shape_grid : tuple of ints
-        grid points in each lateral dimension.
+        Grid points in each lateral dimension.
         If a float is given, then a square simulation size is assumed. If
         a tuple is given, then a rectangular shape is assumed.
     refractive_index : float
         RI of sphere
     measurement_position_um : float
-        axial measurement position in um
+        Axial measurement position in um
     wavelength_nm : float
-        light wavelength in nanometers
+        Light wavelength in nanometers
     offset_x_um : float
         x coordinate of center of the sphere in um
     offset_y_um : float
         y coordinate of center of the sphere in um
     arp: bool
         Use arbitrary precision
+    working_directory: str or pathlib.Path or None
+        User-defined working directory; used for testing
     """
     wavelength_um = wavelength_nm / 1000
 
@@ -173,8 +176,11 @@ def simulate_sphere(radius_sphere_um=2.5,
         shape_grid[1])), "resulting y-size is not an integer"
 
     while True:
-        # create temp dir
-        wdir = tempfile.mkdtemp(prefix="qpsphere_bhfield_")
+        if working_directory is None:
+            # create temp dir
+            wdir = tempfile.mkdtemp(prefix="qpsphere_bhfield_")
+        else:
+            wdir = pathlib.Path(working_directory)
 
         try:
             run_simulation(wdir=wdir,
@@ -212,7 +218,6 @@ def simulate_sphere(radius_sphere_um=2.5,
 
     result = load_field(wdir=wdir, shape_grid=shape_grid)
     clear_temp(wdir=wdir)
-
     return result
 
 

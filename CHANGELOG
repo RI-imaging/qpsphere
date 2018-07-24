@@ -1,3 +1,11 @@
+0.3.0
+ - BREAKING CHANGE in `qpsphere.imagefit.alg.match_phase`:
+   The keyword argument `verbose_out_prefix` has been replaced
+   by `verbose_h5path`. The dependency on matplotlib (and
+   the creation of many PNG files) has been removed in favor
+   of a single hdf5 file that allows to retrace the fitting
+   procedure.
+ - tests: improve coverage 
 0.2.7
  - maintenance release to test automated deploy to PyPI
 0.2.0

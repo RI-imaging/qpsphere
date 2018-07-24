@@ -1,6 +1,52 @@
+import pathlib
+import tempfile
+import shutil
+
+import h5py
 import numpy as np
 
 import qpsphere
+from qpsphere.imagefit import alg
+
+
+def test_alg_export_phase():
+    """when verbose>=2, then an """
+    r = 5e-6
+    n = 1.339
+    s = 20
+    qpi = qpsphere.simulate(radius=r,
+                            sphere_index=n,
+                            medium_index=1.333,
+                            wavelength=550e-9,
+                            grid_size=s,
+                            model="projection",
+                            pixel_size=3 * r / s)
+    tdir = tempfile.mkdtemp(prefix="qpsphere_test_imagefit_alg_hdf5_")
+    path = pathlib.Path(tdir) / "verbose_out.h5"
+    n0 = n * 1.01
+    r0 = r * 0.99
+    alg.match_phase(qpi=qpi,
+                    model="projection",
+                    n0=n0,
+                    r0=r0,
+                    verbose=2,
+                    verbose_h5path=path)
+
+    with h5py.File(path, mode="r") as h5:
+        groups = list(h5.keys())
+        assert len(groups) == 1
+        grp = h5[groups[0]]
+        assert len(grp) > 3
+        resk = list(grp.keys())[-1]
+        ds = grp[resk]
+        assert ds.shape == (s, s)
+        assert ds.attrs["sim model"] == "projection"
+        assert ds.attrs["radius initial"] == r0
+        assert ds.attrs["index initial"] == n0
+        assert ds.attrs["fit iteration"] == len(grp) - 1
+
+    # cleanup
+    shutil.rmtree(tdir, ignore_errors=True)
 
 
 def test_wrapper():

@@ -1,3 +1,5 @@
+import shutil
+import tempfile
 import warnings
 
 import numpy as np
@@ -40,12 +42,14 @@ def test_get_binary():
 
 
 def test_known_fail():
+    wdir = tempfile.mkdtemp(prefix="test_qpsphere_bhfield_")
     try:
         bh.simulate_sphere(radius_sphere_um=50,
                            size_simulation_um=(70, 70),
-                           shape_grid=(4, 4))
+                           shape_grid=(4, 4),
+                           working_directory=wdir)
     except bh.wrap.BHFIELDExecutionError:
-        pass
+        shutil.rmtree(wdir, ignore_errors=True)
     else:
         assert False, "This simulation should not work with BHFIELD"
 

@@ -33,7 +33,7 @@ def simulate(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Refractive index of the surrounding medium
     wavelength: float
         Vacuum wavelength of the imaging light [m]
-    grid_size: tuple of int
+    grid_size: tuple of ints or int
         Resulting image size in x and y [px]
     model: str
         Sphere model to use (see :const:`available`)

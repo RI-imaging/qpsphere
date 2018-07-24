@@ -1,7 +1,7 @@
-import os
+import time
 import warnings
 
-import matplotlib.pylab as plt
+import h5py
 import numpy as np
 
 import qpimage
@@ -14,8 +14,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
                 stop_dn=.0005, stop_dr=.0010, stop_dc=1, min_iter=3,
                 max_iter=100, ret_center=False, ret_pha_offset=False,
                 ret_qpi=False, ret_num_iter=False, ret_interim=False,
-                verbose=0, verbose_out_prefix="./verbose_out/field"
-                ):
+                verbose=0, verbose_h5path="./match_phase_error.h5"):
     """Fit a scattering model to a quantitative phase image
 
     Parameters
@@ -78,8 +77,8 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         If True, return intermediate parameters of each iteration
     verbose: int
         Higher values increase verbosity
-    verbose_out_prefix: str
-        Path to where images are saved at verbosity levels > 1
+    verbose_h5path: str
+        Path to hdf5 output file, created when `verbosity >= 2`
 
     Returns
     -------
@@ -145,12 +144,21 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         print("Starting phase fitting.")
     ii = 0
     message = None
+    if "identifier" in qpi:
+        ident = qpi["identifier"]
+    else:
+        ident = str(time.time())
     while True:
-        if verbose > 1:
-            mphase = spi.get_phase()
-            plot_phase_errors(phase, mphase, n0, r0,
-                              spi.params, ii, model=model,
-                              verbose_out_prefix=verbose_out_prefix)
+        if verbose >= 2:
+            export_phase_error_hdf5(h5path=verbose_h5path,
+                                    identifier=ident,
+                                    index=ii,
+                                    phase=phase,
+                                    mphase=spi.get_phase(),
+                                    model=model,
+                                    n0=n0,
+                                    r0=r0,
+                                    spi_params=spi.params)
 
         ii += 1
 
@@ -218,7 +226,7 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
                                                              spi.sphere_index,
                                                              spi.radius))
         elif verbose > 1:
-            print("Iteration {}: {}", ii, spi.params)
+            print("Iteration {}: {}".format(ii, spi.params))
 
         interim.append([ii, spi.params])
 
@@ -295,11 +303,16 @@ def match_phase(qpi, model, n0, r0, c0=None, pha_offset=0,
         print("Number of iterations: {}".format(ii))
         print("Stopping rationale: {}".format(message))
 
-    if verbose > 1:
-        mphase = spi.get_phase()
-        plot_phase_errors(phase, mphase, n0, r0,
-                          spi.params, ii, model=model,
-                          verbose_out_prefix=verbose_out_prefix)
+    if verbose >= 2:
+        export_phase_error_hdf5(h5path=verbose_h5path,
+                                identifier=ident,
+                                index=ii,
+                                phase=phase,
+                                mphase=spi.get_phase(),
+                                model=model,
+                                n0=n0,
+                                r0=r0,
+                                spi_params=spi.params)
 
     res = [spi.sphere_index, spi.radius]
 
@@ -334,82 +347,44 @@ def sq_phase_diff(pha_a, pha_b):
     return err
 
 
-def plot_phase_errors(phase, mphase, n0, r0, spi_params, ii,
-                      model, verbose_out_prefix):
-    """Output phase image error as PNG and TXT files
+def export_phase_error_hdf5(h5path, identifier, index, phase, mphase,
+                            model, n0, r0, spi_params):
+    """Export the phase error to an hdf5 file
 
     Parameters
     ----------
+    h5path: str or pathlib.Path
+        path to hdf5 output file
+    identifier: str
+        unique identifier of the input phase
+        (e.g. `qpimage.QPImage["identifier"]`)
+    index: int
+        iteration index
     phase: 2d real-valued np.ndarray
         phase image
     mphase: 2d real-valued np.ndarray
         reference phase image
+    model: str
+        sphere model name
     n0: float
         initial object index
     r0: float
         initial object radius [m]
     spi_params: dict
         parameter dictionary of :func:`SpherePhaseInterpolator`
-    ii: int
-        iteration index
-    model: str
-        sphere model name
-    verbose_out_prefix: str
-        path for filename prefix to save PNG and TXT files to.
-        Image file names are formatted as:
-        `{verbose_out_prefix}_phasematch_iter_{ii}_{model}.png`.
-        Text file names are formatted as:
-        `{verbose_out_prefix}_trace_{model}.txt`.
     """
-    n = spi_params["sphere_index"]
-    r = spi_params["radius"]
-
-    phasekwargs = {"vmin": np.min(phase),
-                   "vmax": np.max(phase),
-                   "interpolation": "nearest"}
-    errkwargs = {"vmin": -np.max(phase) / 5,
-                 "vmax": np.max(phase) / 5,
-                 "interpolation": "nearest",
-                 "cmap": "coolwarm"}
-    txtkwargs = {"verticalalignment": "top",
-                 "horizontalalignment": "left",
-                 "color": "white",
-                 "fontsize": "15"}
-
-    _fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-    axes = axes.flatten()
-
-    ma1 = axes[0].imshow(phase, **phasekwargs)
-    axes[0].text(0, 0, "n={:.5f}\nr={:.5f}um".format(
-        n0, r0 * 1e6), **txtkwargs)
-
-    ma2 = axes[1].imshow(mphase, **phasekwargs)
-    axes[1].text(0, 0, "n={:.5f}\nr={:.5f}um".format(n, r * 1e6), **txtkwargs)
-
-    ma3 = axes[2].imshow(phase - mphase, **errkwargs)
-
-    # titles
-    axes[0].set_title("original phase [rad]")
-    axes[1].set_title("{} phase iter{} [rad]".format(model, ii))
-    axes[2].set_title("difference iter{} [rad]".format(ii))
-
-    # color bars
-    plt.colorbar(ma1, ax=axes[0], fraction=.045, pad=.01)
-    plt.colorbar(ma2, ax=axes[1], fraction=.045, pad=.01)
-    plt.colorbar(ma3, ax=axes[2], fraction=.045, pad=.01)
-
-    plt.tight_layout()
-    outpath = verbose_out_prefix + \
-        "phasematch_iter_{:04d}_{}.png".format(ii, model)
-    if not os.path.exists(os.path.dirname(outpath)):
-        os.mkdir(os.path.dirname(outpath))
-    plt.savefig(outpath)
-
-    plt.close()
-
-    # write trace
-    trout = verbose_out_prefix + "trace_{}.txt".format(model)
-    with open(trout, "a") as fd:
-        parms = [n0, r0, n, r, ii]
-        parms = ["{:.10e}".format(p) for p in parms]
-        fd.write(" ".join(parms) + "\n")
+    with h5py.File(h5path, mode="a") as h5:
+        if identifier in h5:
+            grp = h5[identifier]
+        else:
+            grp = h5.create_group(identifier)
+        ds = grp.create_dataset("phase_error_{:05d}".format(index),
+                                data=mphase-phase)
+        ds.attrs["index initial"] = n0
+        ds.attrs["radius initial"] = r0
+        ds.attrs["sim model"] = model
+        ds.attrs["sim index"] = spi_params["sphere_index"]
+        ds.attrs["sim radius"] = spi_params["radius"]
+        ds.attrs["sim center"] = spi_params["center"]
+        ds.attrs["fit iteration"] = index
+        ds.attrs["fit iteration"] = index
