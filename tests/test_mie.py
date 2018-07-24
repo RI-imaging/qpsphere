@@ -11,6 +11,8 @@ def test_basic():
     qpi = mod_mie.mie(grid_size=(3, 3),
                       center=(0, 0),
                       pixel_size=2e-6)
+
+    assert qpi["sim model"] == "mie"
     assert np.allclose(data, qpi.pha.flatten())
 
 

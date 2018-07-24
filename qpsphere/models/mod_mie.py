@@ -110,6 +110,7 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                  "sim center": center,
                  "sim radius": radius,
                  "sim index": sphere_index,
+                 "sim model": "mie",
                  }
 
     qpi = qpimage.QPImage(data=(pha, amp),

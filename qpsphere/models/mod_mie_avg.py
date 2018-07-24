@@ -158,6 +158,7 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                  "sim center": center,
                  "sim radius": radius,
                  "sim index": sphere_index,
+                 "sim model": "mie-avg",
                  }
 
     qpi = qpimage.QPImage(data=(pha_off, amp_off),

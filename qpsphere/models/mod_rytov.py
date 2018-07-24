@@ -94,6 +94,7 @@ def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                  "sim center": center,
                  "sim radius": radius,
                  "sim index": sphere_index,
+                 "sim model": "rytov",
                  }
     qpi = qpimage.QPImage(data=field, which_data="field",
                           meta_data=meta_data)

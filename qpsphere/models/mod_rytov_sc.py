@@ -181,5 +181,6 @@ def rytov_sc(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     # update correct simulation parameters
     qpi["sim radius"] = radius
     qpi["sim index"] = sphere_index
+    qpi["sim model"] = "rytov-sc"
 
     return qpi
