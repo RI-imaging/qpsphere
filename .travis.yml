@@ -7,6 +7,10 @@ env:
   matrix:
   - TEST="PYTEST"
   - TEST="FLAKE8"
+cache:
+  directories:
+  # downloaded binaries
+  - ~/.cache/python-qpsphere
 install:
 # qpimage development version
 - travis_retry pip install git+git://github.com/RI-Imaging/qpimage.git
