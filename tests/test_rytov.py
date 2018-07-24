@@ -2,9 +2,7 @@ import numpy as np
 
 from qpsphere.models import rytov
 
-
-def test_basic():
-    data = np.array(np.array([
+data = np.array(np.array([
         1.23704690e-03, -1.83721900e-03,  1.75599835e-03, -2.10326957e-03,
        -1.20586285e-03, -5.94630023e-04, -2.11503473e-03,  4.40055795e-04,
        -1.87390624e-03,  2.35135946e-03,  2.35135946e-03, -1.87390624e-03,
@@ -107,6 +105,8 @@ def test_basic():
        -2.10326957e-03,  1.75599835e-03, -1.83721900e-03,  1.23704690e-03]
         ))  # noqa: E131
 
+
+def test_basic():
     qpi = rytov(grid_size=(20, 20),
                 center=(9.5, 9.5),
                 radius=5e-6,
@@ -115,6 +115,18 @@ def test_basic():
 
     assert qpi["sim model"] == "rytov"
     assert np.allclose(data, qpi.pha.flatten())
+
+
+def test_odd():
+    qpi = rytov(grid_size=(21, 21),
+                center=(9.5, 9.5),
+                radius=5e-6,
+                wavelength=550e-9,
+                pixel_size=1e-6)
+
+    assert qpi["sim model"] == "rytov"
+    # This corresponds to a phase error of 0.3% from the maximum (0.68rad)
+    assert np.allclose(data, qpi.pha[:20, :20].flatten(), rtol=0, atol=2e-3)
 
 
 if __name__ == "__main__":
