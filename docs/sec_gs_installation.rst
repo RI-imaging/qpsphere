@@ -1,7 +1,7 @@
 Installing qpsphere
 ===================
 
-Qpsphere is written in pure Python and supports Python version 3.5
+Qpsphere is written in pure Python and supports Python version 3.6
 and higher. Qpsphere depends on several other scientific Python packages,
 including:
 

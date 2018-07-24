@@ -17,7 +17,7 @@ This is the documentation of qpsphere version |release|.
    sec_getting_started
    sec_examples
    sec_code_reference
-   z_bib
+   sec_z_bib
 
 
 Indices and tables

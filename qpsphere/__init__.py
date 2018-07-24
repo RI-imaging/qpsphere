@@ -12,7 +12,7 @@ def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
 
     Parameters
     ----------
-    qpi: QPImage
+    qpi: qpimage.QPImage
         Quantitative phase image data
     r0: float
         Approximate radius of the sphere [m]
@@ -46,13 +46,13 @@ def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
     r: float
         Computed radius [m]
     c: tuple of floats
-        Only returned if `ret_center` is True
+        Only returned if `ret_center` is True;
         Center position of the sphere [px]
     pha_offset: float
-        Only returned if `ret_pha_offset` is True
+        Only returned if `ret_pha_offset` is True;
         Phase image background offset
     qpi_sim: qpimage.QPImage
-        Only returned if `ret_qpi` is True
+        Only returned if `ret_qpi` is True;
         Modeled data
 
     Notes

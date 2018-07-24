@@ -43,7 +43,7 @@ rtd_link = "stable" if rtd_version != "latest" else "latest"
 
 # Mock all dependencies
 install_requires = ["lmfit", "matplotlib", "matplotlib.pylab",
-                    "nrefocus", "numpy", "scipy",
+                    "nrefocus", "numpy", "scipy", "h5py",
                     "scipy.interpolate", "scipy.special",
                     "skimage", "skimage.restoration",
                     "qpimage"]
@@ -212,4 +212,5 @@ intersphinx_mapping = {"python": ('https://docs.python.org/', None),
                        "skimage": ('http://scikit-image.org/docs/stable/', None),
                        "lmfit": ('http://lmfit.github.io/lmfit-py/', None),
                        "qpimage": ('http://qpimage.readthedocs.io/en/'+rtd_link, None),
+                       "qpformat": ('http://qpformat.readthedocs.io/en/'+rtd_link, None),
                        }

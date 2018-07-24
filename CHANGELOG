@@ -5,7 +5,8 @@
    the creation of many PNG files) has been removed in favor
    of a single hdf5 file that allows to retrace the fitting
    procedure.
- - tests: improve coverage 
+ - tests: improve coverage
+ - docs: minor improvements
 0.2.7
  - maintenance release to test automated deploy to PyPI
 0.2.0

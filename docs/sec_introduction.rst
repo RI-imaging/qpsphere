@@ -19,7 +19,7 @@ Under the assumption that light travels along straight lines, the measured phase
 	\phi(x,y) = \frac{2 \pi}{\lambda} \int (n(x,y,z) - n_\text{med}) \, dz,  
 
 with the vacuum wavelength :math:`\lambda` of the imaging light and the
-RI of the object-surrounding medium :math:`n_\text{med}`.
+RI of the medium surrounding the object :math:`n_\text{med}`.
 This equation describes a coupling between the RI of the imaged object and its shape:
 From a single phase image, it is not possible to compute the RI of an object without
 knowing its shape and vice versa. Moreover, it is not possible to infer the RI of an

@@ -1,7 +1,8 @@
 """OPD projection image fit applied to an OPD simulation
 
 This examples illustrates how the refractive index and radius of
-a sphere can be determined using the 2D phase fitting algorithm.
+a sphere can be determined using the 2D (image-based) phase fitting
+algorithm.
 """
 import matplotlib.pylab as plt
 

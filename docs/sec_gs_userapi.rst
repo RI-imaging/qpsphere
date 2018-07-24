@@ -4,16 +4,16 @@ User API
 The methods in qpsphere for determining radius and refractive index
 of spherical objects from quantitative phase images can be divided into
 edge-based (:py:mod:`qpsphere.edgefit`) and image-based
-(:py:mod:`qpsphere.imagefit`). The convenience method
-:py:func:`qpsphere.analyze` combines both in a user-convenient
-interface.
+(:py:mod:`qpsphere.imagefit`). The method :py:func:`qpsphere.analyze`
+combines both in a user-convenient interface.
 
 Basic usage
 -----------
-The high-level API of qpsphere heavily relies on :py:mod:`qpimage` for
-accessing meta data to convert in-between units (e.g. pixel size  in
+The high-level API of qpsphere heavily relies on :ref:`qpimage <qpimage:index>`
+for accessing meta data to convert in-between units (e.g. pixel size  in
 meters). If the experimental data file format is supported by 
-:py:mod:`qpformat`, this leads to particularly clean and simple code;
+:ref:`qpformat <qpformat:index>`, this leads to particularly clean and
+simple code;
 
 .. code-block:: python
 
