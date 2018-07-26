@@ -45,7 +45,7 @@ setup(
                       "numpy>=1.12.0",
                       "scikit-image>=0.11.0",
                       "scipy>=0.18.0",
-                      "qpimage>=0.3.0",
+                      "qpimage>=0.4.0",
                       ],
     setup_requires=['pytest-runner'],
     tests_require=["pytest"],

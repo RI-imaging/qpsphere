@@ -8,8 +8,14 @@ Code reference
 
 analyze (Generic fitting wrapper)
 =================================
-.. autofunction:: qpsphere.analyze
+.. function:: qpsphere.analyze
 
+    alias of :func:`qpsphere.cnvnc.analyze`
+
+cnvnc (Convenience methods)
+===========================
+.. automodule:: qpsphere.cnvnc
+    :members:
 
 edgefit (Contour-based fitting)
 ===============================

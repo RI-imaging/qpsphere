@@ -1,3 +1,6 @@
+0.4.0
+ - feat: add convenience methods for computing the background
+   phase mask using the location of the fitted sphere
 0.3.0
  - BREAKING CHANGE in `qpsphere.imagefit.alg.match_phase`:
    The keyword argument `verbose_out_prefix` has been replaced
