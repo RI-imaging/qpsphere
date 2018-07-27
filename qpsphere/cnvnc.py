@@ -119,9 +119,9 @@ def bg_phase_mask_from_sim(sim, radial_clearance=1.1):
         The simulation keyword arguments "sim center", "sim radius",
         and "pixel size" must be present in `sim.meta`.
     radial_clearance: float
-        Multiplicator to the fitted radius of the sphere to make sure
-        no phase values from the border of the sphere contribute
-        to the background `mask` (see below).
+        Multiplicator to the fitted radius of the sphere; modifies
+        the size of the mask; set to "1" to use the radius determined
+        by :func:`qpsphere.analyze`.
         The circular area containing the phase object is set to
         `False` in the output `mask` image.
 
@@ -174,9 +174,9 @@ def bg_phase_mask_for_qpi(qpi, r0, method="edge", model="projection",
         Keyword arguments for tuning the image fitting algorithm,
         see :func:`qpsphere.imagefit.alg.match_phase`
     radial_clearance: float
-        Multiplicator to the fitted radius of the sphere to make sure
-        no phase values from the border of the sphere contribute
-        to the background `mask` (see below).
+        Multiplicator to the fitted radius of the sphere; modifies
+        the size of the mask; set to "1" to use the radius determined
+        by :func:`qpsphere.analyze`.
         The circular area containing the phase object is set to
         `False` in the output `mask` image.
 
