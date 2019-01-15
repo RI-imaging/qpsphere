@@ -45,9 +45,9 @@ command line argument must be set.
     python setup.py sdist bdist_wheel --plat-name manylinux1_x86_64
 
 
-.. |PyPI Version| image:: http://img.shields.io/pypi/v/qpsphere.svg
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/qpsphere.svg
    :target: https://pypi.python.org/pypi/qpsphere
-.. |Tests Status Linux| image:: http://img.shields.io/travis/RI-imaging/qpsphere.svg?label=tests_linux
+.. |Tests Status Linux| image:: https://img.shields.io/travis/RI-imaging/qpsphere.svg?label=tests_linux
    :target: https://travis-ci.org/RI-imaging/qpsphere
 .. |Tests Status Win| image:: https://img.shields.io/appveyor/ci/paulmueller/qpsphere/master.svg?label=tests_win
    :target: https://ci.appveyor.com/project/paulmueller/qpsphere
