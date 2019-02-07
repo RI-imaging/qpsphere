@@ -24,7 +24,7 @@ def interpolate_grid(cin, cout, data, fillval=0):
 
 def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
           wavelength=550e-9, pixel_size=.5e-6, grid_size=(80, 80),
-          center=(39.5, 39.5), radius_sampling=42):
+          center=(39.5, 39.5), focus=0, radius_sampling=42):
     """Field behind a dielectric sphere in the Rytov approximation
 
     Parameters
@@ -43,11 +43,15 @@ def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Resulting image size in x and y [px]
     center: tuple of floats
         Center position in image coordinates [px]
+    focus: float
+        .. versionadded:: 0.5.0
+
+        Axial focus position [m] measured from the center of the
+        sphere in the direction of light propagation.
     radius_sampling: int
         Number of pixels used to sample the sphere radius when
         computing the Rytov field. The default value of 42
         pixels is a reasonable number for single-cell analysis.
-
     Returns
     -------
     qpi: qpimage.QPImage
@@ -69,7 +73,7 @@ def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
                                       wavelength=wavelength,
                                       pixel_size=pixel_size_sim,
                                       grid_size=grid_size_sim,
-                                      lD=0,
+                                      lD=focus,
                                       approx="rytov",
                                       zeropad=5,
                                       oversample=1

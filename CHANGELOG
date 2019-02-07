@@ -1,3 +1,5 @@
+0.5.0
+ - feat: allow to select focusing position for rytov, mie, and mie-avg
 0.4.0
  - feat: add convenience methods for computing the background
    phase mask using the location of the fitted sphere

@@ -49,6 +49,16 @@ models (Scattering models)
    :members:
    :undoc-members:
 
+.. autofunction:: qpsphere.models.mie
+
+.. autofunction:: qpsphere.models.mie_avg
+
+.. autofunction:: qpsphere.models.projection
+
+.. autofunction:: qpsphere.models.rytov
+
+.. autofunction:: qpsphere.models.rytov_sc
+
 
 util (Helper methods)
 ==========================

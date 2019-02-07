@@ -10,7 +10,7 @@ from ._bhfield import simulate_sphere
 
 def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
             wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
-            center=(39.5, 39.5), interpolate=3, arp=True):
+            center=(39.5, 39.5), interpolate=3, focus=0, arp=True):
     """Mie-simulated non-polarized field behind a dielectric sphere
 
     Parameters
@@ -33,6 +33,11 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Compute the radial field with sampling that is by a factor of
         `interpolate` higher than the required data and interpolate the
         2D field from there.
+    focus: float
+        .. versionadded:: 0.5.0
+
+        Axial focus position [m] measured from the center of the
+        sphere in the direction of light propagation.
     arp: bool
         Use arbitrary precision (ARPREC) in BHFIELD computations
 
@@ -127,10 +132,12 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     # We need to perform numerical focusing with the upsampled array,
     # or else we will loose spatial information and the resulting
     # spherical image becomes asymmetric.
-    refoc_field2d = nrefocus.refocus(field2d,
-                                     d=-(radius / pixel_size) * interpolate,
-                                     nm=medium_index,
-                                     res=wavelength / pixel_size * interpolate)
+    refoc_field2d = nrefocus.refocus(
+        field2d,
+        d=-((radius+focus) / pixel_size) * interpolate,
+        nm=medium_index,
+        res=wavelength / pixel_size * interpolate
+        )
 
     # Phase (2PI offset corrected) and amplitude
     ampli, phase = field2ap_corr(refoc_field2d)

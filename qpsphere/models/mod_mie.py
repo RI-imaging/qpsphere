@@ -38,7 +38,7 @@ def field2ap_corr(field):
 
 def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
-        center=(39.5, 39.5), arp=True):
+        center=(39.5, 39.5), focus=0, arp=True):
     """Mie-simulated field behind a dielectric sphere
 
     Parameters
@@ -57,6 +57,11 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         Resulting image size in x and y [px]
     center: tuple of floats
         Center position in image coordinates [px]
+    focus: float
+        .. versionadded:: 0.5.0
+
+        Axial focus position [m] measured from the center of the
+        sphere in the direction of light propagation.
     arp: bool
         Use arbitrary precision (ARPREC) in BHFIELD computations
 
@@ -97,7 +102,7 @@ def mie(radius=5e-6, sphere_index=1.339, medium_index=1.333,
 
     # refocus
     refoc = nrefocus.refocus(field,
-                             d=-(radius / pixel_size),
+                             d=-((radius+focus) / pixel_size),
                              nm=medium_index,
                              res=wavelength / pixel_size)
 
