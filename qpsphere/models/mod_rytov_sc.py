@@ -67,20 +67,25 @@ def correct_rytov_sc_input(radius_sc, sphere_index_sc, medium_index,
 
 
 def correct_rytov_output(radius, sphere_index, medium_index, radius_sampling):
-    """Error-correction of refractive index and radius for Rytov
+    r"""Error-correction of refractive index and radius for Rytov
 
     This method corrects the fitting results for `radius`
     :math:`r_\text{Ryt}` and `sphere_index` :math:`n_\text{Ryt}`
-    obtained using :func:`qpsphere.models.mod_rytov.rytov` using
+    obtained using :func:`qpsphere.models.rytov` using
     the approach described in :cite:`Mueller2018` (eqns. 3,4, and 5).
 
     .. math::
 
         n_\text{Ryt-SC} &= n_\text{Ryt} + n_\text{med} \cdot
                            \left( a_n x^2 + b_n x + c_n \right)
+
         r_\text{Ryt-SC} &= r_\text{Ryt} \cdot
                            \left( a_r x^2 +b_r x + c_r \right)
-        &\text{with~} x = \frac{n_\text{Ryt}}{n_\text{med}} - 1
+
+        &\text{with} x = \frac{n_\text{Ryt}}{n_\text{med}} - 1
+
+    The correction factors are given in
+    :data:`qpsphere.models.mod_rytov_sc.RSC_PARAMS`.
 
     Parameters
     ----------
@@ -132,7 +137,26 @@ def get_params(radius_sampling):
 def rytov_sc(radius=5e-6, sphere_index=1.339, medium_index=1.333,
              wavelength=550e-9, pixel_size=1e-7, grid_size=(80, 80),
              center=(39.5, 39.5), radius_sampling=42):
-    """Field behind a dielectric sphere, systematically corrected Rytov
+    r"""Field behind a dielectric sphere, systematically corrected Rytov
+
+    This method implements a correction of
+    :func:`qpsphere.models.rytov`, where the
+    `radius` :math:`r_\text{Ryt}` and the `sphere_index`
+    :math:`n_\text{Ryt}` are corrected using
+    the approach described in :cite:`Mueller2018` (eqns. 3,4, and 5).
+
+    .. math::
+
+        n_\text{Ryt-SC} &= n_\text{Ryt} + n_\text{med} \cdot
+                           \left( a_n x^2 + b_n x + c_n \right)
+
+        r_\text{Ryt-SC} &= r_\text{Ryt} \cdot
+                           \left( a_r x^2 +b_r x + c_r \right)
+
+        &\text{with} x = \frac{n_\text{Ryt}}{n_\text{med}} - 1
+
+    The correction factors are given in
+    :data:`qpsphere.models.mod_rytov_sc.RSC_PARAMS`.
 
     Parameters
     ----------
@@ -159,10 +183,6 @@ def rytov_sc(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     -------
     qpi: qpimage.QPImage
         Quantitative phase data set
-
-    Notes
-    -----
-
     """
     r_ryt, n_ryt = correct_rytov_sc_input(radius_sc=radius,
                                           sphere_index_sc=sphere_index,

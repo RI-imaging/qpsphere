@@ -59,6 +59,7 @@ models (Scattering models)
 
 .. autofunction:: qpsphere.models.rytov_sc
 
+.. autodata:: qpsphere.models.mod_rytov_sc.RSC_PARAMS 
 
 util (Helper methods)
 ==========================
