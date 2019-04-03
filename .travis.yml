@@ -3,10 +3,6 @@ python:
 - '3.6'
 notifications:
   email: false
-env:
-  matrix:
-  - TEST="PYTEST"
-  - TEST="FLAKE8"
 cache:
   directories:
   # downloaded binaries
@@ -22,15 +18,12 @@ install:
 - travis_retry pip install twine
 - pip freeze
 script:
-- if [ "${TEST}" == "PYTEST" ]; then
-       coverage run --source=qpsphere ./setup.py test;
-       coverage report -m;
-       codecov;
-  else
-       flake8 qpsphere;
-       flake8 examples;
-       flake8 tests;
-  fi;
+- coverage run --source=qpsphere ./setup.py test
+- coverage report -m
+- codecov
+- flake8 qpsphere
+- flake8 examples
+- flake8 tests
 after_success:
 # do not use the travis deploy "bdist_wheel", because we need to give the
 # wheel a specific platform name.
