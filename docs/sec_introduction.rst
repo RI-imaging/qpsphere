@@ -45,9 +45,9 @@ Why qpsphere?
 The purpose of qpsphere is to make our QPI image analysis tools
 (:cite:`Schuermann2015` :cite:`Schuermann2016` :cite:`Mueller2018`)
 available to other research groups.
-Qpsphere makes heavy use of `qpimage <https://qpimage.readthedocs.io/en/stable)>`_,
+Qpsphere makes heavy use of `qpimage <https://qpimage.readthedocs.io>`_,
 a resourceful QPI image manager and is a key component of our QPI analysis
-software `DryMass <https://drymass.readthedocs.io/en/stable)>`_.
+software `DryMass <https://drymass.readthedocs.io>`_.
 
 
 Citing qpsphere
