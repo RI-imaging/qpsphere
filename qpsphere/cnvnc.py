@@ -87,12 +87,18 @@ def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
                                center=c)
             res.append(qpi_sim)
     elif method == "image":
-        n0, r0, c0 = edgefit.analyze(qpi=qpi,
-                                     r0=r0,
-                                     edgekw=edgekw,
-                                     ret_center=True,
-                                     ret_edge=False,
-                                     )
+        try:
+            n0, r0, c0 = edgefit.analyze(qpi=qpi,
+                                         r0=r0,
+                                         edgekw=edgekw,
+                                         ret_center=True,
+                                         ret_edge=False,
+                                         )
+        except edgefit.EdgeDetectionError:
+            # proceed with best guess
+            c0 = np.array(qpi.shape) / 2
+            n0 = qpi["medium index"] + np.sign(np.sum(qpi.pha)) * .01
+
         res = imagefit.analyze(qpi=qpi,
                                model=model,
                                n0=n0,
