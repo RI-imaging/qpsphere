@@ -154,8 +154,8 @@ def circle_fit(edge, ret_dev=False):
     params = lmfit.Parameters()
     # initial parameters
     sum_edge = np.sum(edge)
-    params.add("cx", np.sum(x * edge) / sum_edge)
-    params.add("cy", np.sum(y * edge) / sum_edge)
+    params.add("cx", np.sum(x * edge) / sum_edge, min=0, max=sx)
+    params.add("cy", np.sum(y * edge) / sum_edge, min=0, max=sy)
     # data
     xedge, yedge = np.where(edge)
     # minimize

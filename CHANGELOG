@@ -1,3 +1,8 @@
+0.5.3
+ - fix: also guess initial values for image method if edge detection
+   is ill-defined (RadiusExceedsImageSizeError)
+ - fix: constrict the position of the center to the image area when
+   performing a circle fit to an edge
 0.5.2
  - fix: guess initial values for image method when edge detection
    method fails

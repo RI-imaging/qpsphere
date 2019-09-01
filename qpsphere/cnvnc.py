@@ -94,11 +94,11 @@ def analyze(qpi, r0, method="edge", model="projection", edgekw={}, imagekw={},
                                          ret_center=True,
                                          ret_edge=False,
                                          )
-        except edgefit.EdgeDetectionError:
+        except (edgefit.EdgeDetectionError,
+                edgefit.RadiusExceedsImageSizeError):
             # proceed with best guess
             c0 = np.array(qpi.shape) / 2
             n0 = qpi["medium index"] + np.sign(np.sum(qpi.pha)) * .01
-
         res = imagefit.analyze(qpi=qpi,
                                model=model,
                                n0=n0,
