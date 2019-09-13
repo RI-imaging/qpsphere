@@ -1,6 +1,6 @@
 import numpy as np
 
-from qpsphere.models import mod_rytov_sc, mod_rytov
+from qpsphere.models import excpt, mod_rytov_sc, mod_rytov
 
 
 def test_parameter_inversion():
@@ -44,6 +44,22 @@ def test_basic():
 
     assert qpi_sc["sim model"] == "rytov-sc"
     assert np.all(qpi.pha == qpi_sc.pha)
+
+
+def test_unsupported_parameters():
+    kwargs = dict(grid_size=(20, 20),
+                  center=(9.5, 9.5),
+                  radius=5e-6,
+                  sphere_index=1.330,
+                  medium_index=1.333,
+                  wavelength=550e-9,
+                  pixel_size=1e-6)
+    try:
+        mod_rytov_sc.rytov_sc(**kwargs)
+    except excpt.UnsupportedModelParametersError:
+        pass
+    else:
+        assert False, "Sphere index lower than medium should error out"
 
 
 if __name__ == "__main__":

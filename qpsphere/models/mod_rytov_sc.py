@@ -1,6 +1,11 @@
 import numpy as np
 
 from . import mod_rytov
+from .excpt import UnsupportedModelParametersError
+
+
+class RefractiveIndexLowerThanMediumError(UnsupportedModelParametersError):
+    pass
 
 
 #: correction parameters (see :func:`correct_rytov_output`)
@@ -43,6 +48,11 @@ def correct_rytov_sc_input(radius_sc, sphere_index_sc, medium_index,
     """
     params = get_params(radius_sampling)
 
+    if sphere_index_sc < medium_index:
+        raise RefractiveIndexLowerThanMediumError(
+            "The object refractive index {} is ".format(sphere_index_sc)
+            + "lower than that of the medium {} ".format(medium_index)
+            + "which is not supported by the rytov-sc model.")
     # sage script:
     # var('sphere_index, sphere_index_sc, na, nb, medium_index')
     # x = sphere_index / medium_index - 1
