@@ -1,3 +1,6 @@
+0.5.5
+ - enh: introduce NegativeRadiusError to detect bad model
+   parameters for the rytov-sc model
 0.5.4
  - enh: introduce UnsupportedModelParametersError to detect bad model
    paramters for the rytov-sc model

@@ -8,6 +8,10 @@ class RefractiveIndexLowerThanMediumError(UnsupportedModelParametersError):
     pass
 
 
+class NegativeRadiusError(UnsupportedModelParametersError):
+    pass
+
+
 #: correction parameters (see :func:`correct_rytov_output`)
 RSC_PARAMS = {42: {"na": 1.936,
                    "nb": -0.012,
@@ -72,6 +76,12 @@ def correct_rytov_sc_input(radius_sc, sphere_index_sc, medium_index,
     radius = radius_sc / (params["ra"] * x**2
                           + params["rb"] * x
                           + params["rc"])
+
+    if radius < 0:
+        raise NegativeRadiusError(
+            "With the current Rytov correction scheme, the radius "
+            + "becomes negative-valued. Thus, the input parameters are "
+            + "not supported by the rytov-sc model.")
 
     return radius, sphere_index
 
