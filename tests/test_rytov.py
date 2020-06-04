@@ -1,3 +1,5 @@
+# flake8: noqa: E131
+
 import numpy as np
 
 from qpsphere.models import rytov
@@ -103,7 +105,7 @@ data = np.array(np.array([
        -1.87390624e-03,  2.35135946e-03,  2.35135946e-03, -1.87390624e-03,
         4.40055795e-04, -2.11503473e-03, -5.94630023e-04, -1.20586285e-03,
        -2.10326957e-03,  1.75599835e-03, -1.83721900e-03,  1.23704690e-03]
-        ))  # noqa: E131
+        ))
 
 
 def test_basic():
