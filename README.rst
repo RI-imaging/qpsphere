@@ -48,7 +48,7 @@ command line argument must be set.
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/qpsphere.svg
    :target: https://pypi.python.org/pypi/qpsphere
 .. |Tests Status Linux| image:: https://img.shields.io/travis/RI-imaging/qpsphere.svg?label=tests_linux
-   :target: https://travis-ci.org/RI-imaging/qpsphere
+   :target: https://travis-ci.com/RI-imaging/qpsphere
 .. |Tests Status Win| image:: https://img.shields.io/appveyor/ci/paulmueller/qpsphere/master.svg?label=tests_win
    :target: https://ci.appveyor.com/project/paulmueller/qpsphere
 .. |Coverage Status| image:: https://img.shields.io/codecov/c/github/RI-imaging/qpsphere/master.svg
