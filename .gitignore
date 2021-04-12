@@ -109,3 +109,4 @@ _version_save.py
 qpsphere/resources/*.bin
 qpsphere/resources/*.exe
 qpsphere/resources/*.dll
+.idea

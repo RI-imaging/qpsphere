@@ -137,7 +137,7 @@ def mie_avg(radius=5e-6, sphere_index=1.339, medium_index=1.333,
         d=-((radius+focus) / pixel_size) * interpolate,
         nm=medium_index,
         res=wavelength / pixel_size * interpolate
-        )
+    )
 
     # Phase (2PI offset corrected) and amplitude
     ampli, phase = field2ap_corr(refoc_field2d)

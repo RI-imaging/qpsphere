@@ -1,10 +1,11 @@
 qpsphere
 ========
 
-|PyPI Version| |Tests Status Linux| |Tests Status Win| |Coverage Status| |Docs Status|
+|PyPI Version| |Tests Status| |Coverage Status| |Docs Status|
 
 
-**qpsphere** is a Python3 library for analyzing spherical objects in quantitative phase imaging.
+**qpsphere** is a Python3 library for analyzing spherical objects in
+quantitative phase imaging.
 
 
 Documentation
@@ -28,7 +29,8 @@ Testing
 ::
 
     pip install -e .
-    python setup.py test
+    pip install pytest
+    pytest tests
 
 
 Releases to PyPI
@@ -47,10 +49,8 @@ command line argument must be set.
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/qpsphere.svg
    :target: https://pypi.python.org/pypi/qpsphere
-.. |Tests Status Linux| image:: https://img.shields.io/travis/RI-imaging/qpsphere.svg?label=tests_linux
-   :target: https://travis-ci.com/RI-imaging/qpsphere
-.. |Tests Status Win| image:: https://img.shields.io/appveyor/ci/paulmueller/qpsphere/master.svg?label=tests_win
-   :target: https://ci.appveyor.com/project/paulmueller/qpsphere
+.. |Tests Status| image:: https://img.shields.io/github/workflow/status/RI-Imaging/qpsphere/Checks
+   :target: https://github.com/RI-Imaging/qpsphere/actions?query=workflow%3AChecks
 .. |Coverage Status| image:: https://img.shields.io/codecov/c/github/RI-imaging/qpsphere/master.svg
    :target: https://codecov.io/gh/RI-imaging/qpsphere
 .. |Docs Status| image:: https://readthedocs.org/projects/qpsphere/badge/?version=latest

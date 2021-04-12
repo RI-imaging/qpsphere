@@ -11,7 +11,7 @@ name = 'qpsphere'
 year = "2017"
 
 sys.path.insert(0, realpath(dirname(__file__))+"/"+name)
-from _version import version
+from _version import version  # noqa: E402
 
 
 class BuildIncludeBinaries(build):
@@ -47,8 +47,6 @@ setup(
                       "scipy>=0.18.0",
                       "qpimage>=0.6.1",
                       ],
-    setup_requires=['pytest-runner'],
-    tests_require=["pytest"],
     python_requires='>=3.6, <4',
     keywords=["digital holographic microscopy",
               "optics",
@@ -56,7 +54,7 @@ setup(
               "refractive index",
               "scattering",
               ],
-    classifiers= [
+    classifiers=[
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Intended Audience :: Science/Research'

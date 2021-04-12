@@ -2,4 +2,4 @@
 Bilbliography
 =============
 
-.. bibliography:: qpsphere.bib
+.. bibliography::
