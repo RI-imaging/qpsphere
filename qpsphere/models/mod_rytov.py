@@ -62,8 +62,8 @@ def rytov(radius=5e-6, sphere_index=1.339, medium_index=1.333,
     samp_mult = radius_sampling * pixel_size / radius
     sizex = grid_size[0] * samp_mult
     sizey = grid_size[1] * samp_mult
-    grid_size_sim = [np.int(np.round(sizex)),
-                     np.int(np.round(sizey))]
+    grid_size_sim = (int(np.round(sizex)),
+                     int(np.round(sizey)))
     size_factor = grid_size_sim[0] / grid_size[0]
     pixel_size_sim = pixel_size / size_factor
 
@@ -127,8 +127,6 @@ def sphere_prop_fslice_bessel(radius, sphere_index, medium_index,
         Pixel size [m]
     grid_size: tuple of floats
         Resulting image size in x and y [px]
-    center: tuple of floats
-        Center position in image coordinates [px]
     lD: float
         The axial distance [m] from the center of the sphere
         at which the field is computed.
