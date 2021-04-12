@@ -3,12 +3,12 @@ import pathlib
 from pkg_resources import resource_filename
 import shutil
 
-from .models import _bhfield
+from .models._bhfield import fetch as fetch_bhfield
 
 #: User's cache directory
 CACHE_PATH = pathlib.Path(
     appdirs.AppDirs(appname="python-qpsphere").user_cache_dir)
-#: Qpsphere package `resources` directory.
+#: qpsphere package `resources` directory.
 RESCR_PATH = pathlib.Path(resource_filename("qpsphere", "resources"))
 
 
@@ -33,7 +33,7 @@ def download_binaries(package_dir=False):
     """
     # bhfield
     # make sure the binary is available on the system
-    paths = _bhfield.fetch.get_binaries()
+    paths = fetch_bhfield.get_binaries()
 
     if package_dir:
         # Copy the binaries to the `resources` directory

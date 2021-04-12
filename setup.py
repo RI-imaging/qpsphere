@@ -17,8 +17,8 @@ from _version import version  # noqa: E402
 class BuildIncludeBinaries(build):
     """Put binary files in resource directory for wheel builds"""
     def run(self):
-        import qpsphere
-        qpsphere.util.download_binaries(package_dir=True)
+        from qpsphere.util import download_binaries
+        download_binaries(package_dir=True)
         # run the original build command
         super(BuildIncludeBinaries, self).run()
 
