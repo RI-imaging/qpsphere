@@ -1,4 +1,5 @@
 0.5.8
+ - fix: explicit import of urllib.request to fetch BHFIELD binary
  - build: migrate to GitHub Actions
  - tests: setup.py test is deprecated
  - docs: refurbish docs

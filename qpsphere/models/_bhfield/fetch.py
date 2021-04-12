@@ -5,7 +5,7 @@ import pathlib
 from pkg_resources import resource_filename
 import platform
 import stat
-import urllib
+import urllib.request
 
 import appdirs
 
