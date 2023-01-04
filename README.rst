@@ -49,7 +49,7 @@ command line argument must be set.
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/qpsphere.svg
    :target: https://pypi.python.org/pypi/qpsphere
-.. |Tests Status| image:: https://img.shields.io/github/workflow/status/RI-Imaging/qpsphere/Checks
+.. |Tests Status| image:: https://img.shields.io/github/actions/workflow/status/RI-Imaging/qpsphere/check.yml
    :target: https://github.com/RI-Imaging/qpsphere/actions?query=workflow%3AChecks
 .. |Coverage Status| image:: https://img.shields.io/codecov/c/github/RI-imaging/qpsphere/master.svg
    :target: https://codecov.io/gh/RI-imaging/qpsphere
